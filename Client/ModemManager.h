@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef USE_MODEM_MANAGER
+
 #include <vector>
 
 #include <WiFi.h>
@@ -47,3 +49,5 @@ private:
     bool waitForNetwork();
     bool wakeupFromSleepMode();
 };
+
+#endif

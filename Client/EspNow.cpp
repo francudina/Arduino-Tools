@@ -1,5 +1,7 @@
 #include "EspNow.h"
 
+#ifdef USE_ESPNOW
+
 bool EspNowClient::init() {
     WiFi.mode(WIFI_STA);
     WiFi.disconnect();
@@ -51,3 +53,5 @@ bool EspNowClient::sendMessage(const uint8_t *mac_addr, const uint8_t *data) {
     esp_err_t result = esp_now_send(mac_addr, (uint8_t *) &data, sizeof(data));
     return result == ESP_OK;
 }
+
+#endif

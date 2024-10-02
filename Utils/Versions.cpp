@@ -1,5 +1,7 @@
 #include "Versions.h"
 
+#ifdef USE_VERSION_UTILS
+
 String DeviceSoftware::getVersion() {
     Preferences pref;
     pref.begin(prefMetadata, true);
@@ -50,3 +52,5 @@ uint32_t DeviceSoftware::setBootNumber() {
 String DeviceSoftware::versionFormat(const char *major, const char *minor, const char *patch) {
     return "v" + String(major) + "." + String(minor) + "." + String(patch);
 }
+
+#endif

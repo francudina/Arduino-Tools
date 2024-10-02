@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef USE_HOME_ASSISTANT
+
 #include <ArduinoJson.h>
 #include "Preferences.h"
 
@@ -54,3 +56,5 @@ private:
         MqttClient &mqttClient
     );
 };
+
+#endif

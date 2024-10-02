@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef USE_BATTERY_UTILS
+
 #include <Arduino.h>
 #include <esp_adc_cal.h>
 
@@ -16,3 +18,5 @@ private:
     static esp_adc_cal_characteristics_t adc_chars;
     static uint16_t readVoltage(uint8_t channel);
 };
+
+#endif

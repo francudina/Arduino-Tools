@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef USE_NETWORK_UTILS
+
 #include "Arduino.h"
 #include <WiFi.h>
 #include <esp_wifi.h>
@@ -16,3 +18,5 @@ class IpUtils {
 public:
     static IPAddress ipFromString(const char* ip);
 };
+
+#endif

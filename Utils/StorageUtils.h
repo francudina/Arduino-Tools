@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef USE_STORAGE_UTILS
+
 #include "FS.h"
 #include "SD.h"
 #include "SPI.h"
@@ -54,3 +56,5 @@ public:
     // Print all storage information
     static void printStorageInfo();
 };
+
+#endif

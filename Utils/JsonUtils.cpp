@@ -1,5 +1,7 @@
 #include "JsonUtils.h"
 
+#ifdef USE_JSON_UTILS
+
 // Function to create an empty DynamicJsonDocument with defined capacity
 DynamicJsonDocument createJsonDocument(const size_t numOfKeys) {
     // Estimate the capacity required for the JSON document
@@ -37,3 +39,5 @@ DynamicJsonDocument jsonFromDataReceived(const size_t numOfKeys, const uint8_t *
     String jsonString = String((const char*) data);
     return getJsonFromString(jsonString, numOfKeys);
 }
+
+#endif

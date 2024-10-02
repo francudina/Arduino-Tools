@@ -1,5 +1,7 @@
 #include "MqttConsumer.h"
 
+#ifdef USE_MQTT_CONSUMER
+
 void MqttConsumer::mqttGenericCallback(char* topic, byte* payload, unsigned int length) {
     Serial.print("Message arrived [");
     Serial.print(topic);
@@ -27,3 +29,5 @@ void MqttConsumer::handleTopic(byte* payload, unsigned int length) {
     }
     Serial.println();
 }
+
+#endif

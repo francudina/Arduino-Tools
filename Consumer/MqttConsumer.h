@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef USE_MQTT_CONSUMER
+
 #include <Arduino.h>
 
 #include "../../src/config.h"
@@ -11,3 +13,5 @@ public:
 private:
     static void handleTopic(byte* payload, unsigned int length);
 };
+
+#endif

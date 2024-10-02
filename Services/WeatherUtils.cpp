@@ -1,5 +1,7 @@
 #include "WeatherUtils.h"
 
+#ifdef USE_WEATHER_SERVICE
+
 float WeatherUtils::fetchCurrentTemperature(Client& client) {
 #ifdef DEVICE_LOGGING
     Serial.println("Weather: Fetching current temperature...");
@@ -14,3 +16,5 @@ float WeatherUtils::fetchCurrentTemperature(Client& client) {
     
     return temperature;
 }
+
+#endif
