@@ -1,7 +1,5 @@
 #include "BatteryUtils.h"
 
-#ifdef USE_BATTERY_UTILS
-
 esp_adc_cal_characteristics_t BatteryMonitor::adc_chars;
 
 void BatteryMonitor::begin() {
@@ -32,5 +30,3 @@ void BatteryMonitor::printBatteryInfo() {
 uint16_t BatteryMonitor::readVoltage(uint8_t channel) {
     return esp_adc_cal_raw_to_voltage(analogRead(channel), &adc_chars) * 2;
 }
-
-#endif

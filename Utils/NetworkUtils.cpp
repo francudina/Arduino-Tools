@@ -1,7 +1,5 @@
 #include "NetworkUtils.h"
 
-#ifdef USE_NETWORK_UTILS
-
 uint8_t* MacUtils::getDeviceMacAddress() {
     // init wifi
     WiFi.mode(WIFI_STA);
@@ -57,5 +55,3 @@ IPAddress IpUtils::ipFromString(const char* ip) {
     }
     return addr;
 }
-
-#endif

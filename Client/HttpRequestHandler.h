@@ -1,7 +1,5 @@
 #pragma once
 
-#ifdef USE_HTTP_REQUEST_HANDLER
-
 #include <ArduinoJson.h>
 #include <ArduinoHttpClient.h>
 
@@ -19,5 +17,3 @@ public:
 private:
     HttpClient httpClient;
 };
-
-#endif

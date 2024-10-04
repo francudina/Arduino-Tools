@@ -1,7 +1,5 @@
 #include <WiFiManager.h>
 
-#ifdef USE_WIFI_MANAGER
-
 void WiFiManager::initTime() {
     configTime(9 * 60 * 60, 0, "ntp.jst.mfeed.ad.jp", "ntp.nict.jp", "time.google.com");
 }
@@ -58,5 +56,3 @@ bool WiFiManager::initVPN(
         remotePeerPublicKey,                // Public key of the endpoint peer.
         remotePeerPort);                    // Port pf the endpoint peer.
 }
-
-#endif

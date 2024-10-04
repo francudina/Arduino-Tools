@@ -1,7 +1,5 @@
 #include "ModemManager.h"
 
-#ifdef USE_MODEM_MANAGER
-
 ModemManager::ModemManager() : modem(SerialAT) { }
 
 bool ModemManager::modemInit() {
@@ -294,5 +292,3 @@ std::vector<String> ModemManager::accessPointClientsConnected() {
     }
     return clients;
 }
-
-#endif

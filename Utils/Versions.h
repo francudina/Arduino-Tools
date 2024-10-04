@@ -1,7 +1,5 @@
 #pragma once
 
-#ifdef USE_VERSION_UTILS
-
 #include <Preferences.h>
 #include <cstring>
 
@@ -20,5 +18,3 @@ public:
 private:
     static String versionFormat(const char *major, const char *minor, const char *patch);
 };
-
-#endif

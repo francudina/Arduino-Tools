@@ -1,7 +1,5 @@
 #include "StorageUtils.h"
 
-#ifdef USE_STORAGE_UTILS
-
 // SDCard
 bool SDCard::cardInit() {
     SPI.begin(SDCARD_SCK_PIN, SDCARD_MISO_PIN, SDCARD_MOSI_PIN);
@@ -276,5 +274,3 @@ void Storage::printStorageInfo() {
     }
     Serial.println("- - - - - - - - - - - - - - - - - - - - - - -");
 }
-
-#endif

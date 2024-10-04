@@ -1,7 +1,5 @@
 #include "TimeUtils.h"
 
-#ifdef USE_TIME_UTILS
-
 // Function to get current system time
 time_t getCurrentTime() {
     return now();
@@ -35,5 +33,3 @@ void deviceTimeSync(Client& client) {
     
     Serial.println("TimeUtils: Device Time Synchronized: " + timeToString(getCurrentTime()));
 }
-
-#endif
