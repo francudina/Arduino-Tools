@@ -22,7 +22,7 @@
     },
     "dependencies": {
         "vshymanskyy/TinyGSM": "^0.11.5",
-        "bblanchon/ArduinoJson": "*",
+        "bblanchon/ArduinoJson": "^6.20.0",
         "arduino-libraries/ArduinoHttpClient": "*",
         "knolleary/PubSubClient": "*",
         "WiFi": "*",
