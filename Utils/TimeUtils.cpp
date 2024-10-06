@@ -21,8 +21,8 @@ unsigned long calculateDuration(time_t start, time_t end) {
 
 void deviceTimeSync(Client& client) {
     // request time sync from other service
-    HttpRequestHandler timeSyncClient(client, mainServer, mainServerPort);
-    const DynamicJsonDocument doc = timeSyncClient.performGetRequestAndGetData(mainServerTimeSyncResource, 20);
+    HttpRequestHandler timeSyncClient(client, timeServer, timeServerPort);
+    const DynamicJsonDocument doc = timeSyncClient.performGetRequestAndGetData(timeServerTimeSyncResource, 20);
     timeSyncClient.stop();
 
     if (isJsonEmpty(doc)) { return; }

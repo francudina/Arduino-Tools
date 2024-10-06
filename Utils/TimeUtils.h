@@ -5,7 +5,12 @@
 #include <ArduinoHttpClient.h>
 
 #include "HttpRequestHandler.h"
-#include "../../src/config.h"
+
+#ifndef TIME_SERVER_CONFIG
+#define timeServer                      "smart-home-pi.duckdns.org"
+#define timeServerPort                  443
+#define timeServerTimeSyncResource      "/v1/currentTime?typemillis"
+#endif
 
 // Function to get current system time
 time_t getCurrentTime();

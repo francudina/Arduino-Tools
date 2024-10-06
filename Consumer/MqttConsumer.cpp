@@ -9,13 +9,14 @@ void MqttConsumer::mqttGenericCallback(char* topic, byte* payload, unsigned int 
     }
     Serial.println();
 
-    if (strcmp(topic, mqttTopic_data) == 0) {
-        handleTopic(payload, length);
-    } else if (strcmp(topic, mqttTopic_peers) == 0) {
-        handleTopic(payload, length);
-    } else if (strcmp(topic, ha_hubNode_data) == 0) {
-        handleTopic(payload, length);
-    }
+    // if (strcmp(topic, mqttTopic_data) == 0) {
+    //     handleTopic(payload, length);
+    // } else if (strcmp(topic, mqttTopic_peers) == 0) {
+    //     handleTopic(payload, length);
+    // } else if (strcmp(topic, ha_hubNode_data) == 0) {
+    //     handleTopic(payload, length);
+    // }
+
     // Add more topics and handlers as needed
 }
 

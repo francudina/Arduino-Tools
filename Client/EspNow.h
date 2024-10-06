@@ -5,7 +5,6 @@
 
 #include "NetworkUtils.h"
 #include "JsonUtils.h"
-#include "../../src/config.h"
 
 typedef struct EspNowResponse {
     String topic;

@@ -3,7 +3,10 @@
 #include <set>
 #include <PubSubClient.h>
 
-#include "../../src/config.h"
+#ifndef MQTT_MAX_BUFFER_SIZE
+// MQTT max packet buffer size
+#define MQTT_MAX_BUFFER_SIZE 1024
+#endif
 
 class MqttClient {
 public:

@@ -3,7 +3,22 @@
 #include <Preferences.h>
 #include <cstring>
 
-#include "../../src/config.h"
+// Preferences config
+// - general info
+#ifndef PREF_GENERAL_INFO
+#define prefMetadata                        "metadata"
+#define prefMetadata_bootCount              "boot_count"
+#define prefMetadata_loopCount              "loop_count"
+#define prefMetadata_macAddress             "mac_address"
+#define prefMetadata_softwareVersion        "sw_version"
+#endif
+
+// - software
+#ifndef DEVICE_DETAILS
+const char device_swVersion_major[] = "1";
+const char device_swVersion_minor[] = "0";
+const char device_swVersion_patch[] = "0";
+#endif
 
 class DeviceSoftware {
 public:

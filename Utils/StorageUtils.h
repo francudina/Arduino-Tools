@@ -7,7 +7,13 @@
 #include <esp_spi_flash.h>
 #include <esp_heap_caps.h>
 
-#include "../../src/config.h"
+#ifndef SDCARD_CONFIG
+// SD Card
+#define SDCARD_CS_PIN   13
+#define SDCARD_SCK_PIN  14
+#define SDCARD_MOSI_PIN 15
+#define SDCARD_MISO_PIN 2
+#endif
 
 class SDCard {
 public:

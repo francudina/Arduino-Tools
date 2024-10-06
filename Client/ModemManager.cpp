@@ -34,7 +34,7 @@ bool ModemManager::modemInit() {
 bool ModemManager::connect() {
     int tryCount = 0;
     while (++tryCount < NETWORK_RETRIES_NUM) {
-        bool connected = connectToNetwork(wifiSSID, wifiPass, apn, gprsUser, gprsPass);
+        bool connected = connectToNetwork(wifi_ssid, wifi_pass, apn_name, gprs_user, gprs_pass);
         if (connected) { break; }
 
         Serial.printf("Modem: Failed to connect to network. Retrying... (%d)\n", tryCount);

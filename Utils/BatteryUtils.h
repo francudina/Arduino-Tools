@@ -3,7 +3,10 @@
 #include <Arduino.h>
 #include <esp_adc_cal.h>
 
-#include "../../src/config.h"
+#ifndef BOARD_BAT_ADC_PIN
+// Battery & Solar
+#define BOARD_BAT_ADC_PIN 35
+#endif
 
 class BatteryMonitor {
 public:

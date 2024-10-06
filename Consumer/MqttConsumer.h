@@ -2,8 +2,6 @@
 
 #include <Arduino.h>
 
-#include "../../src/config.h"
-
 class MqttConsumer {
 public:
     static void mqttGenericCallback(char* topic, byte* payload, unsigned int length);

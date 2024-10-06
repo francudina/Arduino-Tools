@@ -86,7 +86,7 @@ bool MqttClient::publish(const char* topic, const String payload) {
     }
     // subscribe again to required topics, if needed! 
     // because connection termination resets connection!
-    subscribeAll(mainServerMqttQoS);
+    subscribeAll(1);
     
     // const char* p = payload.c_str();
     // unsigned int length = strlen(p);
