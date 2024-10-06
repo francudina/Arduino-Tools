@@ -16,5 +16,11 @@
     ],
     "license": "MIT",
     "frameworks": "arduino",
-    "platforms": "*"
+    "platforms": "*",
+    "build": {
+        "libArchive": false,
+		"flags": [
+			"-ISource/src/*"
+		]
+    }
 }
