@@ -20,7 +20,10 @@
     "build": {
         "libArchive": false,
 		"flags": [
-			"-ISource/src/*"
+			"-ISource/src/Client/",
+			"-ISource/src/Consumer/",
+			"-ISource/src/Services/",
+			"-ISource/src/Utils/"
 		]
     }
 }
