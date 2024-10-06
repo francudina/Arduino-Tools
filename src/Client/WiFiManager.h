@@ -3,7 +3,7 @@
 #include <WiFi.h>
 #include <WireGuard-ESP32.h>
 
-#include "NetworkUtils.h"
+#include "../Utils/NetworkUtils.h"
 
 
 class WiFiManager {

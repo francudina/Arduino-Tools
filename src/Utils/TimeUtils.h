@@ -4,7 +4,7 @@
 #include <TimeLib.h>
 #include <ArduinoHttpClient.h>
 
-#include "HttpRequestHandler.h"
+#include "../Client/HttpRequestHandler.h"
 
 #ifndef TIME_SERVER_CONFIG
 #define timeServer                      "smart-home-pi.duckdns.org"

@@ -6,7 +6,7 @@
 #include <Arduino.h>
 #include <TinyGsmClient.h>
 
-#include "NetworkUtils.h"
+#include "../Utils/NetworkUtils.h"
 
 #ifndef MODEM_CONFIG
 // Set serial for AT commands (to the module)

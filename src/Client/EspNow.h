@@ -3,8 +3,8 @@
 #include <esp_now.h>
 #include <WiFi.h>
 
-#include "NetworkUtils.h"
-#include "JsonUtils.h"
+#include "../Utils/NetworkUtils.h"
+#include "../Utils/JsonUtils.h"
 
 typedef struct EspNowResponse {
     String topic;

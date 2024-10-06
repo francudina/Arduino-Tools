@@ -3,12 +3,12 @@
 #include <ArduinoJson.h>
 #include "Preferences.h"
 
-#include "JsonUtils.h"
-#include "MqttClient.h"
-#include "Versions.h"
-#include "NetworkUtils.h"
-#include "StorageUtils.h"
-#include "BatteryUtils.h"
+#include "../Utils/JsonUtils.h"
+#include "../Client/MqttClient.h"
+#include "../Utils/Versions.h"
+#include "../Utils/NetworkUtils.h"
+#include "../Utils/StorageUtils.h"
+#include "../Utils/BatteryUtils.h"
 #include "WeatherUtils.h"
 
 // Device details

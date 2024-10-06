@@ -3,7 +3,7 @@
 #include <ArduinoJson.h>
 #include <ArduinoHttpClient.h>
 
-#include "JsonUtils.h"
+#include "../Utils/JsonUtils.h"
 
 class HttpRequestHandler {
 public:

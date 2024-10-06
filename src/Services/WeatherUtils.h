@@ -1,11 +1,10 @@
 #pragma once
 
 #include <Arduino.h>
-#include "ArduinoJson.h"
-#include "HttpRequestHandler.h"
+#include <ArduinoJson.h>
 
-#include "HttpRequestHandler.h"
-#include "JsonUtils.h"
+#include "../Client/HttpRequestHandler.h"
+#include "../Utils/JsonUtils.h"
 
 #ifndef WEATHER_SERVER_CONFIG
 // - Open
