@@ -1,5 +1,5 @@
 {
-    "name": "Arduino Tools",
+    "name": "ArduinoTools",
     "version": "1.0.0",
     "description": "Library for Arduino Projects",
     "keywords": "Arduino, ESP32, IoT",
@@ -18,9 +18,7 @@
     "frameworks": "arduino",
     "platforms": "*",
     "build": {
-        "libArchive": false,
-        "srcDir": ".",
-        "srcFilter": "+<*> -<docs> -<examples> -<test>"
+        "libArchive": false
     },
     "dependencies": {
         "vshymanskyy/TinyGSM": "^0.11.5",
