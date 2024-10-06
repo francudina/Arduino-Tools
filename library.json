@@ -21,5 +21,18 @@
         "libArchive": false,
         "srcDir": ".",
         "srcFilter": "+<*> -<docs> -<examples> -<test>"
+    },
+    "dependencies": {
+        "vshymanskyy/TinyGSM": "^0.11.5",
+        "bblanchon/ArduinoJson": "*",
+        "arduino-libraries/ArduinoHttpClient": "*",
+        "knolleary/PubSubClient": "*",
+        "WiFi": "*",
+        "FS": "*",
+        "SD": "*",
+        "SPI": "*",
+        "PaulStoffregen/Time": "*",
+        "Preferences": "*",
+        "ciniml/WireGuard-ESP32": "*"
     }
 }
