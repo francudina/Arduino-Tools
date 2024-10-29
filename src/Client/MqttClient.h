@@ -1,5 +1,7 @@
 #pragma once
 
+#if defined(USE_MQTT)
+
 #include <set>
 #include <PubSubClient.h>
 
@@ -38,3 +40,5 @@ private:
     void addTopic(const char* topic);
     void removeTopic(const char* topic);
 };
+
+#endif

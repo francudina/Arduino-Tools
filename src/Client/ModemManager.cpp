@@ -1,3 +1,5 @@
+#if defined(USE_GSM_MODEM)
+
 #include "ModemManager.h"
 
 ModemManager::ModemManager() : modem(SerialAT) { }
@@ -292,3 +294,6 @@ std::vector<String> ModemManager::accessPointClientsConnected() {
     }
     return clients;
 }
+
+
+#endif

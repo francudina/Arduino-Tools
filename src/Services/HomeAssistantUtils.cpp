@@ -1,3 +1,5 @@
+#if defined(USE_HOMEASSISTANT)
+
 #include "HomeAssistantUtils.h"
 
 void HomeAssistant::config_check(MqttClient &mqttClient) {
@@ -215,3 +217,5 @@ bool HomeAssistant::config_sensorRegistration(
     String config = getStringFromJson(payload);
     return mqttClient.publish(configTopic, config);
 }
+
+#endif

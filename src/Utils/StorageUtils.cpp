@@ -1,3 +1,5 @@
+#if defined(USE_STORAGE)
+
 #include "StorageUtils.h"
 
 // SDCard
@@ -274,3 +276,5 @@ void Storage::printStorageInfo() {
     }
     Serial.println("- - - - - - - - - - - - - - - - - - - - - - -");
 }
+
+#endif

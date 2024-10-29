@@ -1,5 +1,7 @@
 #pragma once
 
+#if defined(USE_STORAGE)
+
 #include <esp_spi_flash.h>
 #include <esp_heap_caps.h>
 #include <FS.h>
@@ -36,6 +38,8 @@ public:
     static void testFileIO(fs::FS &fs, const char *path);
 };
 
+
+
 class Storage {
 public:
     // Flash Information
@@ -59,3 +63,5 @@ public:
     // Print all storage information
     static void printStorageInfo();
 };
+
+#endif

@@ -1,3 +1,5 @@
+#if defined(USE_WEATHER)
+
 #include "WeatherUtils.h"
 
 float WeatherUtils::fetchCurrentTemperature(Client& client) {
@@ -14,3 +16,5 @@ float WeatherUtils::fetchCurrentTemperature(Client& client) {
     
     return temperature;
 }
+
+#endif

@@ -1,5 +1,7 @@
 #pragma once
 
+#if defined(USE_PREFERENCE)
+
 #include <Preferences.h>
 #include <cstring>
 
@@ -33,3 +35,5 @@ public:
 private:
     static String versionFormat(const char *major, const char *minor, const char *patch);
 };
+
+#endif

@@ -1,5 +1,7 @@
 #pragma once
 
+#if defined(USE_GSM_MODEM)
+
 #include <vector>
 
 #include <WiFi.h>
@@ -113,3 +115,5 @@ private:
     bool waitForNetwork();
     bool wakeupFromSleepMode();
 };
+
+#endif

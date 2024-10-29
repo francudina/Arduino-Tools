@@ -1,5 +1,7 @@
 #pragma once
 
+#if defined(USE_TIME)
+
 #include <Arduino.h>
 #include <TimeLib.h>
 #include <ArduinoHttpClient.h>
@@ -23,3 +25,5 @@ unsigned long calculateDuration(time_t start, time_t end);
 
 // Sync time
 void deviceTimeSync(Client& client);
+
+#endif

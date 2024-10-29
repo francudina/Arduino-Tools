@@ -1,3 +1,5 @@
+#if defined(USE_HTTP_CLIENT)
+
 #include "HttpRequestHandler.h"
 
 HttpRequestHandler::HttpRequestHandler(Client& client, const char* server, int port)
@@ -42,3 +44,5 @@ DynamicJsonDocument HttpRequestHandler::performGetRequestAndGetData(const char* 
 
     return doc;
 }
+
+#endif

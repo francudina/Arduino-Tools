@@ -1,3 +1,5 @@
+#if defined(USE_MQTT)
+
 #include "MqttClient.h"
 
 MqttClient::MqttClient(Client& client, const char* broker, int port, const char* clientId, const char* username, const char* password)
@@ -121,3 +123,5 @@ void MqttClient::waitForMessages(const int waitMillis) {
 String MqttClient::connectionString() {
     return "Host: " + String(broker) + ":" + String(port) + ", Client ID: " + String(clientId);
 }
+
+#endif

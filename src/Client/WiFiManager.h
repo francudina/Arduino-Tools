@@ -1,5 +1,7 @@
 #pragma once
 
+#if defined(USE_WIREGUARD)
+
 #include <WiFi.h>
 #include <WireGuard-ESP32.h>
 
@@ -24,3 +26,5 @@ public:
 
     static void initTime();
 };
+
+#endif

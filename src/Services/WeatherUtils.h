@@ -1,5 +1,7 @@
 #pragma once
 
+#if defined(USE_WEATHER)
+
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
@@ -18,3 +20,5 @@ class WeatherUtils {
 public:
     static float fetchCurrentTemperature(Client& client);
 };
+
+#endif

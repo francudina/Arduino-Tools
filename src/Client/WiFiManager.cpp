@@ -1,3 +1,5 @@
+#if defined(USE_WIREGUARD)
+
 #include "WiFiManager.h"
 
 void WiFiManager::initTime() {
@@ -56,3 +58,5 @@ bool WiFiManager::initVPN(
         remotePeerPublicKey,                // Public key of the endpoint peer.
         remotePeerPort);                    // Port pf the endpoint peer.
 }
+
+#endif

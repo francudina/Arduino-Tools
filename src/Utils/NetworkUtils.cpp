@@ -1,3 +1,5 @@
+#if defined(USE_HTTP_CLIENT)
+
 #include "NetworkUtils.h"
 
 uint8_t* MacUtils::getDeviceMacAddress() {
@@ -55,3 +57,5 @@ IPAddress IpUtils::ipFromString(const char* ip) {
     }
     return addr;
 }
+
+#endif
