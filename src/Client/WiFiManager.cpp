@@ -4,41 +4,41 @@
 
 #ifdef USE_WIREGUARD
 
-void WiFiManager::initTime() {
+void VpnManager::initTime() {
     configTime(9 * 60 * 60, 0, "ntp.jst.mfeed.ad.jp", "ntp.nict.jp", "time.google.com");
 }
 
-bool WiFiManager::initWiFi(const char* ssid, const char* password, const int retry) {
-    Serial.print("WiFiManager: Connecting to WiFi...");
+bool VpnManager::initWiFi(const char* ssid, const char* password, const int retry) {
+    Serial.print("VpnManager: Connecting to WiFi...");
     // station mode set
     WiFi.mode(WIFI_STA);
     if (!WiFi.begin(ssid, password)) {
-        Serial.print("WiFiManager: Failed authorizing WiFi connection!");
+        Serial.print("VpnManager: Failed authorizing WiFi connection!");
         return false;
     }
 
     // connection retry
     int i = 0;
-    while (!WiFiManager::isWiFiConnected() && i++ <= retry) {
+    while (!VpnManager::isWiFiConnected() && i++ <= retry) {
         Serial.print('.');
         delay(1000);
     }
 
-    if (!WiFiManager::isWiFiConnected()) {
-        Serial.print("WiFiManager: Failed Connecting to WiFi");
+    if (!VpnManager::isWiFiConnected()) {
+        Serial.print("VpnManager: Failed Connecting to WiFi");
         return false;
     }
 
-    Serial.printf("WiFiManager: Connected with local IP: %s", 
+    Serial.printf("VpnManager: Connected with local IP: %s", 
         WiFi.localIP().toString().c_str());
     return true;
 }
 
-bool WiFiManager::isWiFiConnected() {
+bool VpnManager::isWiFiConnected() {
     return WiFi.status() == WL_CONNECTED;
 }
 
-bool WiFiManager::initVPN(
+bool VpnManager::initVPN(
         const char* localIP, 
         const char* privateKey, 
         const char* remotePeerAddress, 
@@ -46,12 +46,12 @@ bool WiFiManager::initVPN(
         uint16_t remotePeerPort
 ) {
     // check connection
-    if (!WiFiManager::isWiFiConnected()) {
-        Serial.print("WiFiManager: WiFi isn't Connected");
+    if (!VpnManager::isWiFiConnected()) {
+        Serial.print("VpnManager: WiFi isn't Connected");
         return false;
     }
     // configure time before
-    WiFiManager::initTime();
+    VpnManager::initTime();
     // init vpn client
     return wg.begin(
         IpUtils::ipFromString(localIP),     // IP address of the local interface
