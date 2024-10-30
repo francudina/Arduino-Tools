@@ -20,13 +20,6 @@
     "build": {
         "libArchive": false
     },
-    "include": [
-        "src",
-        "src/Client",
-        "src/Consumer",
-        "src/Services",
-        "src/Utils"
-    ],
     "dependencies": {
         "vshymanskyy/TinyGSM": "^0.11.5",
         "bblanchon/ArduinoJson": "^6.20.0",
