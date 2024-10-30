@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(USE_TIME)
+#ifdef USE_TIME
 
 #include <Arduino.h>
 #include <TimeLib.h>

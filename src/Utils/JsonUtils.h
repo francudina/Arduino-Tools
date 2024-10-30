@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(USE_JSON)
+#ifdef USE_JSON
 
 #include <ArduinoJson.h>
 

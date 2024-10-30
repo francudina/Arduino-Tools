@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(USE_GSM_MODEM)
+#ifdef USE_GSM_MODEM
 
 #include <vector>
 

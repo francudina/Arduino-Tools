@@ -1,4 +1,4 @@
-#if defined(USE_TIME)
+#ifdef USE_TIME
 
 #include "TimeUtils.h"
 

@@ -1,4 +1,4 @@
-#if defined(USE_HTTP_CLIENT)
+#ifdef USE_HTTP_CLIENT
 
 #include "NetworkUtils.h"
 

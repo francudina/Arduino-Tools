@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(USE_HOMEASSISTANT)
+#ifdef USE_HOMEASSISTANT
 
 #include <ArduinoJson.h>
 #include "Preferences.h"

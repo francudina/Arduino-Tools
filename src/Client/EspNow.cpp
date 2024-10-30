@@ -1,4 +1,4 @@
-#if defined(USE_ESPNOW)
+#ifdef USE_ESPNOW
 
 #include "EspNow.h"
 

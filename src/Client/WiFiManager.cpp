@@ -1,6 +1,8 @@
 #if defined(USE_WIREGUARD)
-
 #include "WiFiManager.h"
+#endif
+
+#ifdef USE_WIREGUARD
 
 void WiFiManager::initTime() {
     configTime(9 * 60 * 60, 0, "ntp.jst.mfeed.ad.jp", "ntp.nict.jp", "time.google.com");

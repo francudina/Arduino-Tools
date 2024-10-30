@@ -1,4 +1,4 @@
-#if defined(USE_PREFERENCE)
+#ifdef USE_PREFERENCE
 
 #include "Versions.h"
 

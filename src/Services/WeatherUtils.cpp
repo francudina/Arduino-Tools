@@ -1,4 +1,4 @@
-#if defined(USE_WEATHER)
+#ifdef USE_WEATHER
 
 #include "WeatherUtils.h"
 

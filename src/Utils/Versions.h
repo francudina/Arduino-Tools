@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(USE_PREFERENCE)
+#ifdef USE_PREFERENCE
 
 #include <Preferences.h>
 #include <cstring>

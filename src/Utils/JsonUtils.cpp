@@ -1,4 +1,4 @@
-#if defined(USE_JSON)
+#ifdef USE_JSON
 
 #include "JsonUtils.h"
 

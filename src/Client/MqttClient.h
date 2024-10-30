@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(USE_MQTT)
+#ifdef USE_MQTT
 
 #include <set>
 #include <PubSubClient.h>

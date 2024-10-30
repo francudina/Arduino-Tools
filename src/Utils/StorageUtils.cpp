@@ -1,6 +1,8 @@
-#if defined(USE_STORAGE)
-
+#if defined(USE_SDCARD) || defined(USE_STORAGE)
 #include "StorageUtils.h"
+#endif
+
+#if defined(USE_SDCARD)
 
 // SDCard
 bool SDCard::cardInit() {
@@ -199,6 +201,10 @@ void SDCard::testFileIO(fs::FS &fs, const char *path) {
     Serial.printf("SDCard: %u bytes written for %u ms\n", 2048 * 512, end);
     file.close();
 }
+
+#endif
+
+#ifdef USE_STORAGE
 
 // Storage
 uint32_t Storage::getFlashChipSize() {

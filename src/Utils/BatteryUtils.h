@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(USE_BATTERY)
+#ifdef USE_BATTERY
 
 #include <Arduino.h>
 #include <esp_adc_cal.h>

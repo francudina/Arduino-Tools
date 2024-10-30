@@ -1,4 +1,4 @@
-#if defined(USE_MQTT)
+#ifdef USE_MQTT
 
 #include "MqttClient.h"
 

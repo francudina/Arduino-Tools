@@ -1,4 +1,4 @@
-#if defined(USE_BATTERY)
+#ifdef USE_BATTERY
 
 #include "BatteryUtils.h"
 

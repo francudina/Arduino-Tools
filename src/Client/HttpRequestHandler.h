@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(USE_HTTP_CLIENT)
+#ifdef USE_HTTP_CLIENT
 
 #include <ArduinoJson.h>
 #include <ArduinoHttpClient.h>

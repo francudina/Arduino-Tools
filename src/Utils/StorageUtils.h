@@ -1,12 +1,14 @@
 #pragma once
 
 #if defined(USE_STORAGE)
-
 #include <esp_spi_flash.h>
 #include <esp_heap_caps.h>
+#include <SPI.h>
+#endif
+
+#ifdef USE_SDCARD
 #include <FS.h>
 #include <SD.h>
-#include <SPI.h>
 
 #ifndef SDCARD_CONFIG
 // SD Card
@@ -38,7 +40,9 @@ public:
     static void testFileIO(fs::FS &fs, const char *path);
 };
 
+#endif
 
+#ifdef USE_STORAGE
 
 class Storage {
 public:

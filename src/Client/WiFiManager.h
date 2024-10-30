@@ -1,14 +1,16 @@
 #pragma once
 
 #if defined(USE_WIREGUARD)
-
 #include <WiFi.h>
+#endif
+
+#ifdef USE_WIREGUARD
 #include <WireGuard-ESP32.h>
 
 #include "../Utils/NetworkUtils.h"
 
 
-class WiFiManager {
+class VpnManager {
 private:
     static WireGuard wg;
 

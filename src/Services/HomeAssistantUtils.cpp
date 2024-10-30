@@ -1,4 +1,4 @@
-#if defined(USE_HOMEASSISTANT)
+#ifdef USE_HOMEASSISTANT
 
 #include "HomeAssistantUtils.h"
 

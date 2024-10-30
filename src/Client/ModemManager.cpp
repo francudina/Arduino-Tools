@@ -1,4 +1,4 @@
-#if defined(USE_GSM_MODEM)
+#ifdef USE_GSM_MODEM
 
 #include "ModemManager.h"
 

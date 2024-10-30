@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(USE_ESPNOW)
+#ifdef USE_ESPNOW
 
 #include <esp_now.h>
 #include <WiFi.h>
