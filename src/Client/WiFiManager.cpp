@@ -2,7 +2,9 @@
 #include "WiFiManager.h"
 
 void WiFiManager::initTime() {
+    Serial.println("WiFiManager: Time Init ...");
     configTime(9 * 60 * 60, 0, "ntp.jst.mfeed.ad.jp", "ntp.nict.jp", "time.google.com");
+    Serial.println("WiFiManager: Time Init: done");
 }
 
 bool WiFiManager::initWiFi(const char* ssid, const char* password, const int retry) {
@@ -22,11 +24,11 @@ bool WiFiManager::initWiFi(const char* ssid, const char* password, const int ret
     }
 
     if (!WiFiManager::isWiFiConnected()) {
-        Serial.print("WiFiManager: Failed Connecting to WiFi");
+        Serial.print("\nWiFiManager: Failed Connecting to WiFi");
         return false;
     }
 
-    Serial.printf("WiFiManager: Connected with local IP: %s", 
+    Serial.printf("\nWiFiManager: Connected with local IP: %s", 
         WiFi.localIP().toString().c_str());
     return true;
 }
