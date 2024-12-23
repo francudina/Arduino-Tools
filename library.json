@@ -1,0 +1,36 @@
+{
+    "name": "ArduinoTools",
+    "version": "1.0.0",
+    "description": "Library for Arduino Projects",
+    "keywords": "Arduino, ESP32, IoT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/francudina/Arduino-Tools.git"
+    },
+    "authors": [
+        {
+            "name": "Fran Cudina",
+            "email": "cudina.fran@gmail.com",
+            "maintainer": true
+        }
+    ],
+    "license": "MIT",
+    "frameworks": "arduino",
+    "platforms": "*",
+    "build": {
+        "libArchive": false
+    },
+    "dependencies": {
+        "vshymanskyy/TinyGSM": "^0.11.5",
+        "bblanchon/ArduinoJson": "^6.20.0",
+        "arduino-libraries/ArduinoHttpClient": "*",
+        "knolleary/PubSubClient": "*",
+        "WiFi": "*",
+        "FS": "*",
+        "SD": "*",
+        "SPI": "*",
+        "PaulStoffregen/Time": "*",
+        "Preferences": "*",
+        "ciniml/WireGuard-ESP32": "*"
+    }
+}
