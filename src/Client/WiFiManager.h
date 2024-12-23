@@ -7,9 +7,6 @@
 
 
 class WiFiManager {
-private:
-    static WireGuard wg;
-
 public:
     static bool initWiFi(const char* ssid, const char* pass, const int retry = 10);
 
