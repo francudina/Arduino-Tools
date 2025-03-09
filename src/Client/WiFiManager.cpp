@@ -24,11 +24,11 @@ bool WiFiManager::initWiFi(const char* ssid, const char* password, const int ret
     }
 
     if (!WiFiManager::isWiFiConnected()) {
-        Serial.print("\nWiFiManager: Failed Connecting to WiFi");
+        Serial.println("\nWiFiManager: Failed Connecting to WiFi");
         return false;
     }
 
-    Serial.printf("\nWiFiManager: Connected with local IP: %s", 
+    Serial.printf("\nWiFiManager: Connected with local IP: %s\n", 
         WiFi.localIP().toString().c_str());
     return true;
 }
