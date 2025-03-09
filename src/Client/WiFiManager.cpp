@@ -9,6 +9,10 @@ void WiFiManager::initTime() {
 
 bool WiFiManager::initWiFi(const char* ssid, const char* password, const int retry) {
     Serial.print("WiFiManager: Connecting to WiFi...");
+    if (WiFiManager::isWiFiConnected()) {
+        Serial.println("WiFiManager: WiFi already connected!");
+        return true;
+    }
     // station mode set
     WiFi.mode(WIFI_STA);
     if (!WiFi.begin(ssid, password)) {
@@ -31,6 +35,10 @@ bool WiFiManager::initWiFi(const char* ssid, const char* password, const int ret
     Serial.printf("\nWiFiManager: Connected with local IP: %s\n", 
         WiFi.localIP().toString().c_str());
     return true;
+}
+
+bool WiFiManager::disconnect() {
+    return WiFi.disconnect();
 }
 
 bool WiFiManager::isWiFiConnected() {

@@ -9,6 +9,7 @@
 class WiFiManager {
 public:
     static bool initWiFi(const char* ssid, const char* pass, const int retry = 10);
+    static bool disconnect();
 
     static bool isWiFiConnected();
 
