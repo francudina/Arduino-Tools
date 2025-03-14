@@ -22,16 +22,10 @@
     },
     "dependencies": {
         "vshymanskyy/TinyGSM": "^0.11.5",
-        "bblanchon/ArduinoJson": "^6.20.0",
-        "arduino-libraries/ArduinoHttpClient": "*",
+        "bblanchon/ArduinoJson": "*",
         "knolleary/PubSubClient": "*",
-        "WiFi": "*",
-        "FS": "*",
-        "SD": "*",
-        "SPI": "*",
         "PaulStoffregen/Time": "*",
-        "Preferences": "*",
         "ciniml/WireGuard-ESP32": "*",
-        "espressif/arduino-esp32": "3.2.0-RC2"
+        "espressif/arduino-esp32": "^3.2.0-RC2"
     }
 }
