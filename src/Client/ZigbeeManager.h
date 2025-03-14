@@ -2,6 +2,10 @@
 
 #ifdef USE_ZIGBEE
 
+#ifndef ZIGBEE_MODE_ZCZR
+#define ZIGBEE_MODE_ZCZR
+#endif
+
 #include <Zigbee.h>
 
 // Zigbee Config
