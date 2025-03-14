@@ -2,8 +2,10 @@
 
 #ifdef USE_ZIGBEE
 
+#ifdef ZIGBEE_GATEWAY
 #ifndef ZIGBEE_MODE_ZCZR
 #define ZIGBEE_MODE_ZCZR
+#endif
 #endif
 
 #include <Zigbee.h>
@@ -24,14 +26,12 @@
 #define GATEWAY_MANUFACTURER "Espressif"
 #define GATEWAY_MODEL "ZigbeeGateway_Custom"
 
-#ifndef ZIGBEE_MODE_ZCZR
-#error "Zigbee coordinator mode is not selected in Tools->Zigbee mode"
-#endif
-
 #endif
 
 class ZigbeeClient {
 public:
+
+    ZigbeeClient();
 
 #ifdef ZIGBEE_GATEWAY
     bool gatewayStart(zigbee_role_t deviceRole);
@@ -42,7 +42,9 @@ public:
     void openNetwork(uint8_t time);
 
 private:
+#ifdef ZIGBEE_GATEWAY
     ZigbeeGateway zbGateway;
+#endif
 };
 
 #endif
