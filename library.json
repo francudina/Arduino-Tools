@@ -25,6 +25,5 @@
         "bblanchon/ArduinoJson": "*",
         "knolleary/PubSubClient": "*",
         "PaulStoffregen/Time": "*"
-        // "ciniml/WireGuard-ESP32": "*"
     }
 }

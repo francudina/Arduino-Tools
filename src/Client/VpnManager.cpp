@@ -5,6 +5,7 @@
 // #define USE_WIFI
 // #endif
 
+// dependency: "ciniml/WireGuard-ESP32": "*"
 
 // bool VpnManager::initVPN(
 //         const char* localIP, 
