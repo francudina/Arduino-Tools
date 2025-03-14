@@ -9,7 +9,7 @@
 #define ZIGBEE_ENDPOINT_NUMBER 1
 #endif
 
-#ifdef ZIGBEE_GATEWAY_CONFIG
+#ifndef ZIGBEE_GATEWAY_CONFIG
 #define GATEWAY_RCP_UART_PORT UART_NUM_1
 #define GATEWAY_RCP_RX_PIN 4
 #define GATEWAY_RCP_TX_PIN 5
@@ -34,7 +34,7 @@ public:
 #endif
 
     bool isConnected();
-    bool factoryReset();
+    void factoryReset();
     void openNetwork(uint8_t time);
 
 private:

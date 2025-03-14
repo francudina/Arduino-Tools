@@ -26,8 +26,8 @@ bool ZigbeeClient::isConnected() {
     return Zigbee.connected();
 }
 
-bool ZigbeeClient::factoryReset() {
-    return Zigbee.factoryReset();
+void ZigbeeClient::factoryReset() {
+    Zigbee.factoryReset();
 }
 
 void ZigbeeClient::openNetwork(uint8_t time) {
