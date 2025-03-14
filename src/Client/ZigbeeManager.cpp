@@ -1,5 +1,7 @@
 #ifdef USE_ZIGBEE
 
+#include "ZigbeeManager.h"
+
 #ifdef ZIGBEE_GATEWAY
 bool ZigbeeClient::gatewayStart(zigbee_role_t deviceRole) {
   zbGateway = ZigbeeGateway(ZIGBEE_ENDPOINT_NUMBER);
@@ -18,7 +20,6 @@ bool ZigbeeClient::gatewayStart(zigbee_role_t deviceRole) {
   // ZIGBEE_COORDINATOR or ZIGBEE_ROUTER
   return Zigbee.begin(deviceRole);
 }
-
 #endif
 
 bool ZigbeeClient::isConnected() {
