@@ -16,7 +16,7 @@ bool ZigbeeClient::gatewayStart(zigbee_role_t deviceRole) {
   Zigbee.setRadioConfig(radio_config);
   
   // ZIGBEE_COORDINATOR or ZIGBEE_ROUTER
-  if (!Zigbee.begin(deviceRole)) ESP.restart();
+  return Zigbee.begin(deviceRole);
 }
 
 #endif
