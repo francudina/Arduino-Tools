@@ -11,10 +11,10 @@ String DeviceVariable::setVariable(const char* pref, const char* var, const char
     return v;
 }
 
-String DeviceVariable::getVariable(const char* pref, const char* var, const char* default) {
+String DeviceVariable::getVariable(const char* pref, const char* var, const char* defaultVal) {
     Preferences p;
     p.begin(prefMetadata, true);
-    String val = p.getString(var, String(default));
+    String val = p.getString(var, String(defaultVal));
     p.end();
     return val;
 }

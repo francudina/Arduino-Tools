@@ -25,7 +25,7 @@ const char device_swVersion_patch[] = "0";
 class DeviceVariable {
     public:    
         static String setVariable(const char* pref, const char* var, const char* val);
-        static String getVariable(const char* pref, const char* var, const char* default = "");
+        static String getVariable(const char* pref, const char* var, const char* defaultVal = "");
         static void delVariable(const char* pref, const char* var);
         static void clear(const char* pref);
     };
