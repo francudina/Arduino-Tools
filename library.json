@@ -31,6 +31,7 @@
         "SPI": "*",
         "PaulStoffregen/Time": "*",
         "Preferences": "*",
-        "ciniml/WireGuard-ESP32": "*"
+        "ciniml/WireGuard-ESP32": "*",
+        "espressif/arduino-esp32": "3.2.0-RC2"
     }
 }

@@ -1,6 +1,37 @@
-#ifdef USE_PREFERENCE
+#ifdef USE_VARIABLES
 
-#include "Versions.h"
+#include "Variables.h"
+
+String DeviceVariable::setVariable(const char* pref, const char* var, const char* val) {
+    Preferences p;
+    p.begin(prefMetadata, false);
+    String v = String(val);
+    p.putString(var, v);
+    p.end();
+    return v;
+}
+
+String DeviceVariable::getVariable(const char* pref, const char* var, const char* default) {
+    Preferences p;
+    p.begin(prefMetadata, true);
+    String val = p.getString(var, String(default));
+    p.end();
+    return val;
+}
+
+void DeviceVariable::delVariable(const char* pref, const char* var) {
+    Preferences p;
+    p.begin(prefMetadata, false);
+    p.remove(var);
+    p.end();
+}
+
+void DeviceVariable::clear(const char* pref) {
+    Preferences p;
+    p.begin(prefMetadata, false);
+    p.clear();
+    p.end();
+}
 
 String DeviceSoftware::getVersion() {
     Preferences pref;

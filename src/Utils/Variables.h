@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef USE_PREFERENCE
+#ifdef USE_VARIABLES
 
 #include <Preferences.h>
 #include <cstring>
@@ -21,6 +21,14 @@ const char device_swVersion_major[] = "1";
 const char device_swVersion_minor[] = "0";
 const char device_swVersion_patch[] = "0";
 #endif
+
+class DeviceVariable {
+    public:    
+        static String setVariable(const char* pref, const char* var, const char* val);
+        static String getVariable(const char* pref, const char* var, const char* default = "");
+        static void delVariable(const char* pref, const char* var);
+        static void clear(const char* pref);
+    };
 
 class DeviceSoftware {
 public:
