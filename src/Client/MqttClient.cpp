@@ -71,7 +71,7 @@ void MqttClient::subscribeAll(const uint8_t qos) {
     for (const auto& topic : topicsToSubscribe) {
         bool added = mqttClient.subscribe(topic.c_str(), qos);
 #ifdef DEVICE_LOGGING
-        Serial.printf("MqttClient: Subscribed to topic: '%s' (QoS: %d)? %s\n", topic, qos, added ? "true" : "false");
+        Serial.printf("MqttClient: Subscribed to topic: '%s' (QoS: %d)? %s\n", topic.c_str(), qos, added ? "true" : "false");
 #endif  
     }
 }
