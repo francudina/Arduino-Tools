@@ -167,19 +167,6 @@ public:
         return true;
     }
 
-    static void onNewPeerCb(void (*callback)(const esp_now_recv_info_t *info, const uint8_t *data, int len, void *arg), bool registerPeer) {
-        ESP_NOW.onNewPeer(callback, NULL);
-        ESP_LOGI(TAG, "ESP-NOW onNewPeer callback set");
-        if (registerPeer) {
-            registerNewPeer(info, data, len, arg);
-        }
-    }
-
-    static bool removePeer(ESP_NOW_Peer &peer) {
-        return ESP_NOW.removePeer(peer);
-    }
-
-private:
     static void registerNewPeer(const esp_now_recv_info_t *info, const uint8_t *data, int len, void *arg) {
         bool broadcast = memcmp(info->des_addr, ESP_NOW.BROADCAST_ADDR, 6) == 0;
         ESP_LOGI(TAG, "Unknown peer " MACSTR " sent a %s message\n", MAC2STR(info->src_addr), broadcast ? "broadcast" : "unicast");
@@ -192,6 +179,15 @@ private:
         }
         ESP_LOGI(TAG, "New peer registered: " MACSTR "", MAC2STR(info->src_addr));
 
+    }
+
+    static void onNewPeerCb(void (*callback)(const esp_now_recv_info_t *info, const uint8_t *data, int len, void *arg)) {
+        ESP_NOW.onNewPeer(callback, NULL);
+        ESP_LOGI(TAG, "ESP-NOW onNewPeer callback set");
+    }
+
+    static bool removePeer(ESP_NOW_Peer &peer) {
+        return ESP_NOW.removePeer(peer);
     }
 };
 
