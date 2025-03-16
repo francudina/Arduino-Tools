@@ -57,12 +57,20 @@ typedef struct EspNowMsg {
     static EspNowMsg fromReceivedData(const String data) {
         JsonDocument doc = getJsonFromString(data);
 
-        EspNowMsg response;
-        response.topic = doc["topic"].as<String>();
-        response.data = doc["data"].as<String>();
-        response.status = doc["status"];
+        EspNowMsg m;
+        m.topic = doc["topic"].as<String>();
+        m.data = doc["data"].as<String>();
+        m.status = doc["status"];
 
-        return response;
+        return m;
+    }
+
+    String toString() {
+        JsonDocument m;
+        m["topic"] = topic;
+        m["data"] = data;
+        m["status"] = status;
+        return getStringFromJson(m);
     }
 
     // Method to print the Response
