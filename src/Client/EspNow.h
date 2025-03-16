@@ -84,13 +84,14 @@ public:
     static bool begin() {
         // Initialize the Wi-Fi module
         ESP_LOGI(TAG, "ESP-NOW init has begun");
-        WiFi.mode(WIFI_STA);
+        WiFi.mode(ESPNOW_WIFI_MODE);
         WiFi.setChannel(ESPNOW_WIFI_CHANNEL);
         while (!WiFi.STA.started()) {
             delay(100);
         }
 
-        ESP_LOGI(TAG, "ESP-NOW Wi-Fi parameters:  Mode: %s, MAC Address: %s, Channel: %d", ESPNOW_WIFI_IF, WiFi.macAddress(), ESPNOW_WIFI_CHANNEL);
+        ESP_LOGI(TAG, "ESP-NOW Wi-Fi parameters: Mode: %s, MAC Address: %s, Channel: %d", 
+            ESPNOW_WIFI_MODE == WIFI_STA ? "STATION" : "AP", WiFi.macAddress().c_str(), ESPNOW_WIFI_CHANNEL);
           // Initialize the ESP-NOW protocol
         if (!ESP_NOW.begin()) {
             ESP_LOGE(TAG, "Failed to initialize ESP-NOW");
