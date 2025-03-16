@@ -2,11 +2,37 @@
 
 #ifdef USE_ESPNOW
 
-#include <esp_now.h>
-#include <WiFi.h>
+#include "ESP32_NOW.h"
+#include "WiFi.h"
+
+#include <esp_mac.h>  // For the MAC2STR and MACSTR macros
 
 #include "../Utils/NetworkUtils.h"
 #include "../Utils/JsonUtils.h"
+
+// 0: AP mode, 1: Station mode
+#ifndef ESPNOW_WIFI_MODE_STATION
+#define ESPNOW_WIFI_MODE_STATION 1
+#endif
+
+#if ESPNOW_WIFI_MODE_STATION          // ESP-NOW using WiFi Station mode
+#define ESPNOW_WIFI_MODE WIFI_STA     // WiFi Mode
+#define ESPNOW_WIFI_IF   WIFI_IF_STA  // WiFi Interface
+#else                                 // ESP-NOW using WiFi AP mode
+#define ESPNOW_WIFI_MODE WIFI_AP      // WiFi Mode
+#define ESPNOW_WIFI_IF   WIFI_IF_AP   // WiFi Interface
+#endif
+
+// Channel to be used by the ESP-NOW protocol
+#ifndef ESPNOW_WIFI_CHANNEL
+#define ESPNOW_WIFI_CHANNEL 6
+#endif
+
+#define ESPNOW_BAUD 115200
+
+#define ESPNOW_PEER_TYPE_DEFAULT "espnow_peer"
+
+static const char *TAG = "ESP_NOW";
 
 typedef struct EspNowResponse {
     String topic;
@@ -51,19 +77,103 @@ typedef struct EspNowResponse {
 
 } EspNowResponse;
 
-class EspNowClient {
-public:
-    static bool init();
-    static bool deinit();
-    
-    static void setOnReceiveCallback(void (*callback)(const uint8_t *, const uint8_t *, int));
-    static void onReceiveDefaultCallback(const uint8_t *mac_addr, const uint8_t *data, int data_len);
-    static void removeOnReceiveCallback();
 
-    static bool sendMessage(const uint8_t *mac_addr, const uint8_t *data);
+
+class EspNow {
+public:
+    static bool begin() {
+        // Initialize the Wi-Fi module
+        ESP_LOGI(TAG, "ESP-NOW init has begun");
+        WiFi.mode(WIFI_STA);
+        WiFi.setChannel(ESPNOW_WIFI_CHANNEL);
+        while (!WiFi.STA.started()) {
+            delay(100);
+        }
+
+        ESP_LOGI(TAG, "ESP-NOW Wi-Fi parameters:  Mode: %s, MAC Address: %s, Channel: %d", ESPNOW_WIFI_IF, WiFi.macAddress(), ESPNOW_WIFI_CHANNEL);
+          // Initialize the ESP-NOW protocol
+        if (!ESP_NOW.begin()) {
+            ESP_LOGE(TAG, "Failed to initialize ESP-NOW");
+            return false;
+        }
+        ESP_LOGI(TAG, "ESP-NOW initialized"));
+        return true;
+    }
+
+    static void onNewPeerCb(void (*callback)(const esp_now_recv_info_t *info, const uint8_t *data, int len, void *arg)) {
+        ESP_NOW.onNewPeer(callback, NULL);
+        ESP_LOGI(TAG, "ESP-NOW onNewPeer callback set"));
+    }
+
+    static bool removePeer(ESP_NOW_Peer &peer) {
+        ESP_NOW.removePeer(peer);
+    }
+}
+
+
+class EspNowPeer : public ESP_NOW_Peer {
+public:
+    // Constructors of the class
+    EspNowPeer(const char *peer_type, const uint8_t *mac_addr, const uint8_t *lmk) 
+    : ESP_NOW_Peer(mac_addr, ESPNOW_WIFI_CHANNEL, ESPNOW_WIFI_IF, lmk), peer_type(peer_type) { }
+
+    EspNowPeer(const uint8_t *mac_addr, const uint8_t *lmk) 
+    : ESP_NOW_Peer(mac_addr, ESPNOW_WIFI_CHANNEL, ESPNOW_WIFI_IF, lmk), peer_type(ESPNOW_PEER_TYPE_DEFAULT) { }
+
+    // Destructor of the class
+    ~EspNowPeer() {}
+
+    // Function to register the peer
+    bool addNewPeer() {
+        if (!add()) {
+            ESP_LOGE(TAG, "Failed to register peer: '%s'", peer_type);
+            return false;
+        }
+        ESP_LOGI(TAG, "Peer added: '%s'", peer_type);
+        return true;
+    }
+
+    // Function to send a message to all devices within the network
+    bool sendMsg(const uint8_t *data, size_t len) {
+        if (!send(data, len)) {
+            ESP_LOGE(TAG, "Failed to send message to:'%s'", peer_type);
+            return false;
+        }
+        ESP_LOGI(TAG, "Message sent to:'%s'", peer_type);
+        return true;
+    }
+
+    void onReceive(const uint8_t *data, size_t len, bool broadcast) {
+        ESP_LOGI(TAG, "Received a message from '%s' (%s): %s", peer_type, broadcast ? "broadcast" : "unicast", (char *)data);
+        // EspNowResponse response = EspNowResponse::fromReceivedData(data);
+        // response.print();
+        if (on_receive_cb) {
+            ESP_LOGD(TAG, "Receive callback triggered for peer: '%s'" peer_type);
+            on_receive_cb(data, len, broadcast);
+        }
+    }
+
+    void onSent(bool success) {
+        ESP_LOGI(TAG, "Message transmission to peer '%s' %s", peer_type, success ? "successful" : "failed");
+        if (on_sent_cb) {
+            ESP_LOGD(TAG, "Send callback triggered for peer: '%s'" peer_type);
+            on_sent_cb(success);
+        }
+    }
+
+    void setOnReceiveCallback(void (*callback)(const uint8_t *, size_t, bool)) {
+        on_receive_cb = callback;
+    }
+
+    void setOnSentCallback(void (*callback)(bool)) {
+        on_sent_cb = callback;
+    }
 
 private:
-    static void setOnSendCallback(const uint8_t *mac_addr, esp_now_send_status_t status);
+    char *peer_type;
+
+    void (*on_receive_cb)(const uint8_t *, size_t, bool) = nullptr;
+    void (*on_sent_cb)(bool) = nullptr;
 };
 
 #endif
