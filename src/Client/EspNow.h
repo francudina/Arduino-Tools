@@ -54,7 +54,7 @@ typedef struct EspNowResponse {
 
     // Static method to deserialize from JSON
     static EspNowResponse fromReceivedData(const uint8_t *data) {
-        DynamicJsonDocument doc = jsonFromDataReceived(50, data);
+        JsonDocument doc = jsonFromDataReceived(data);
 
         EspNowResponse response;
         response.topic = doc["topic"].as<String>();
