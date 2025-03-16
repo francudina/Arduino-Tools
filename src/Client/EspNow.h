@@ -96,19 +96,19 @@ public:
             ESP_LOGE(TAG, "Failed to initialize ESP-NOW");
             return false;
         }
-        ESP_LOGI(TAG, "ESP-NOW initialized"));
+        ESP_LOGI(TAG, "ESP-NOW initialized");
         return true;
     }
 
     static void onNewPeerCb(void (*callback)(const esp_now_recv_info_t *info, const uint8_t *data, int len, void *arg)) {
         ESP_NOW.onNewPeer(callback, NULL);
-        ESP_LOGI(TAG, "ESP-NOW onNewPeer callback set"));
+        ESP_LOGI(TAG, "ESP-NOW onNewPeer callback set");
     }
 
     static bool removePeer(ESP_NOW_Peer &peer) {
         ESP_NOW.removePeer(peer);
     }
-}
+};
 
 
 class EspNowPeer : public ESP_NOW_Peer {
@@ -170,7 +170,7 @@ public:
     }
 
 private:
-    char *peer_type;
+    const char *peer_type;
 
     void (*on_receive_cb)(const uint8_t *, size_t, bool) = nullptr;
     void (*on_sent_cb)(bool) = nullptr;
