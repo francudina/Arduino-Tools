@@ -148,7 +148,7 @@ public:
         // EspNowResponse response = EspNowResponse::fromReceivedData(data);
         // response.print();
         if (on_receive_cb) {
-            ESP_LOGD(TAG, "Receive callback triggered for peer: '%s'" peer_type);
+            ESP_LOGD(TAG, "Receive callback triggered for peer: '%s'", peer_type);
             on_receive_cb(data, len, broadcast);
         }
     }
@@ -156,7 +156,7 @@ public:
     void onSent(bool success) {
         ESP_LOGI(TAG, "Message transmission to peer '%s' %s", peer_type, success ? "successful" : "failed");
         if (on_sent_cb) {
-            ESP_LOGD(TAG, "Send callback triggered for peer: '%s'" peer_type);
+            ESP_LOGD(TAG, "Send callback triggered for peer: '%s'", peer_type);
             on_sent_cb(success);
         }
     }

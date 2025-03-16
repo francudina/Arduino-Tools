@@ -12,7 +12,8 @@ JsonDocument createJsonDocument() {
 JsonDocument getJsonFromString(const String &jsonString) {
     JsonDocument doc = createJsonDocument();
     // Deserialize the JSON string into the JsonDocument
-    if (deserializeJson(doc, jsonString)) {
+    DeserializationError error = deserializeJson(doc, jsonString);
+    if (error) {
         Serial.print(F("deserializeJson(): failed: "));
         Serial.println(error.f_str());
     }
@@ -26,7 +27,7 @@ String getStringFromJson(const JsonDocument &doc) {
     return jsonString;
 }
 
-bool isJsonEmpty(const JsonDocument doc) { return doc.capacity() == 0; }
+bool isJsonEmpty(const JsonDocument doc) { return doc.isNull(); }
 
 JsonDocument jsonFromDataReceived(const uint8_t *data) {
     String jsonString = String((const char*) data);
