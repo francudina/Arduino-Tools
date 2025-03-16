@@ -5,6 +5,7 @@
 #include "ESP32_NOW.h"
 #include "WiFi.h"
 
+#include <vector>
 #include <esp_mac.h>  // For the MAC2STR and MACSTR macros
 
 #include "../Utils/NetworkUtils.h"
@@ -78,40 +79,6 @@ typedef struct EspNowResponse {
 } EspNowResponse;
 
 
-
-class EspNow {
-public:
-    static bool begin() {
-        // Initialize the Wi-Fi module
-        ESP_LOGI(TAG, "ESP-NOW init has begun");
-        WiFi.mode(ESPNOW_WIFI_MODE);
-        WiFi.setChannel(ESPNOW_WIFI_CHANNEL);
-        while (!WiFi.STA.started()) {
-            delay(100);
-        }
-
-        ESP_LOGI(TAG, "ESP-NOW Wi-Fi parameters: Mode: %s, MAC Address: %s, Channel: %d", 
-            ESPNOW_WIFI_MODE == WIFI_STA ? "STATION" : "AP", WiFi.macAddress().c_str(), ESPNOW_WIFI_CHANNEL);
-          // Initialize the ESP-NOW protocol
-        if (!ESP_NOW.begin()) {
-            ESP_LOGE(TAG, "Failed to initialize ESP-NOW");
-            return false;
-        }
-        ESP_LOGI(TAG, "ESP-NOW initialized");
-        return true;
-    }
-
-    static void onNewPeerCb(void (*callback)(const esp_now_recv_info_t *info, const uint8_t *data, int len, void *arg)) {
-        ESP_NOW.onNewPeer(callback, NULL);
-        ESP_LOGI(TAG, "ESP-NOW onNewPeer callback set");
-    }
-
-    static bool removePeer(ESP_NOW_Peer &peer) {
-        return ESP_NOW.removePeer(peer);
-    }
-};
-
-
 class EspNowPeer : public ESP_NOW_Peer {
 public:
     // Constructors of the class
@@ -175,6 +142,57 @@ private:
 
     void (*on_receive_cb)(const uint8_t *, size_t, bool) = nullptr;
     void (*on_sent_cb)(bool) = nullptr;
+};
+
+
+class EspNow {
+public:
+    static bool begin() {
+        // Initialize the Wi-Fi module
+        ESP_LOGI(TAG, "ESP-NOW init has begun");
+        WiFi.mode(ESPNOW_WIFI_MODE);
+        WiFi.setChannel(ESPNOW_WIFI_CHANNEL);
+        while (!WiFi.STA.started()) {
+            delay(100);
+        }
+
+        ESP_LOGI(TAG, "ESP-NOW Wi-Fi parameters: Mode: %s, MAC Address: %s, Channel: %d", 
+            ESPNOW_WIFI_MODE == WIFI_STA ? "STATION" : "AP", WiFi.macAddress().c_str(), ESPNOW_WIFI_CHANNEL);
+            // Initialize the ESP-NOW protocol
+        if (!ESP_NOW.begin()) {
+            ESP_LOGE(TAG, "Failed to initialize ESP-NOW");
+            return false;
+        }
+        ESP_LOGI(TAG, "ESP-NOW initialized");
+        return true;
+    }
+
+    static void onNewPeerCb(void (*callback)(const esp_now_recv_info_t *info, const uint8_t *data, int len, void *arg), bool registerPeer) {
+        ESP_NOW.onNewPeer(callback, NULL);
+        ESP_LOGI(TAG, "ESP-NOW onNewPeer callback set");
+        if (registerPeer) {
+            registerNewPeer(info, data, len, arg);
+        }
+    }
+
+    static bool removePeer(ESP_NOW_Peer &peer) {
+        return ESP_NOW.removePeer(peer);
+    }
+
+private:
+    static void registerNewPeer(const esp_now_recv_info_t *info, const uint8_t *data, int len, void *arg) {
+        bool broadcast = memcmp(info->des_addr, ESP_NOW.BROADCAST_ADDR, 6) == 0;
+        ESP_LOGI(TAG, "Unknown peer " MACSTR " sent a %s message\n", MAC2STR(info->src_addr), broadcast ? "broadcast" : "unicast");
+        ESP_LOGI(TAG, "Registering the peer...");
+    
+        EspNowPeer new_peer(info->src_addr, NULL);
+        if (!new_peer.addNewPeer()) {
+            ESP_LOGE(TAG, "Failed to register the new peer " MACSTR "", MAC2STR(info->src_addr));
+            return;
+        }
+        ESP_LOGI(TAG, "New peer registered: " MACSTR "", MAC2STR(info->src_addr));
+
+    }
 };
 
 #endif
