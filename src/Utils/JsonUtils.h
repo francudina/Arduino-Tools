@@ -4,11 +4,11 @@
 
 #include <ArduinoJson.h>
 
-DynamicJsonDocument createJsonDocument(const size_t numOfKeys);
-DynamicJsonDocument getJsonFromString(const String &jsonString, const size_t numOfKeys);
-String getStringFromJson(const DynamicJsonDocument &doc);
-bool isJsonEmpty(const DynamicJsonDocument doc);
+JsonDocument createJsonDocument();
+JsonDocument getJsonFromString(const String &jsonString);
+String getStringFromJson(const JsonDocument &doc);
+bool isJsonEmpty(const JsonDocument doc);
 
-DynamicJsonDocument jsonFromDataReceived(const size_t numOfKeys, const uint8_t *data);
+JsonDocument jsonFromDataReceived(const uint8_t *data);
 
 #endif

@@ -106,7 +106,7 @@ public:
     }
 
     static bool removePeer(ESP_NOW_Peer &peer) {
-        ESP_NOW.removePeer(peer);
+        return ESP_NOW.removePeer(peer);
     }
 };
 
