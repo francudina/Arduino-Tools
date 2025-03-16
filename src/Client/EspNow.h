@@ -147,7 +147,7 @@ private:
 
 class EspNow {
 public:
-    static bool begin() {
+    static bool begin(const uint8_t *pmk) {
         // Initialize the Wi-Fi module
         ESP_LOGI(TAG, "ESP-NOW init has begun");
         WiFi.mode(ESPNOW_WIFI_MODE);
@@ -159,7 +159,7 @@ public:
         ESP_LOGI(TAG, "ESP-NOW Wi-Fi parameters: Mode: %s, MAC Address: %s, Channel: %d", 
             ESPNOW_WIFI_MODE == WIFI_STA ? "STATION" : "AP", WiFi.macAddress().c_str(), ESPNOW_WIFI_CHANNEL);
             // Initialize the ESP-NOW protocol
-        if (!ESP_NOW.begin()) {
+        if (!ESP_NOW.begin(pmk)) {
             ESP_LOGE(TAG, "Failed to initialize ESP-NOW");
             return false;
         }
