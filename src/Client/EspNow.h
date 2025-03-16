@@ -35,17 +35,17 @@
 
 static const char *TAG = "ESP_NOW";
 
-typedef struct EspNowResponse {
+typedef struct EspNowMsg {
     String topic;
     String data;
     int status;
 
     // Constructor to initialize to null state
-    EspNowResponse() : topic(""), data(""), status(-1) {}
+    EspNowMsg() : topic(""), data(""), status(-1) {}
 
-    // Static method to create a null EspNowResponse
-    static EspNowResponse createNull() {
-        return EspNowResponse();
+    // Static method to create a null EspNowMsg
+    static EspNowMsg createNull() {
+        return EspNowMsg();
     }
 
     // Method to check if this Response is null
@@ -54,10 +54,10 @@ typedef struct EspNowResponse {
     }
 
     // Static method to deserialize from JSON
-    static EspNowResponse fromReceivedData(const String data) {
+    static EspNowMsg fromReceivedData(const String data) {
         JsonDocument doc = getJsonFromString(data);
 
-        EspNowResponse response;
+        EspNowMsg response;
         response.topic = doc["topic"].as<String>();
         response.data = doc["data"].as<String>();
         response.status = doc["status"];
@@ -76,7 +76,7 @@ typedef struct EspNowResponse {
         Serial.println(status);
     }
 
-} EspNowResponse;
+} EspNowMsg;
 
 
 class EspNowPeer : public ESP_NOW_Peer {
