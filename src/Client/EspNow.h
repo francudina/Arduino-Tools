@@ -119,8 +119,6 @@ public:
 
     void onReceive(const uint8_t *data, size_t len, bool broadcast) {
         ESP_LOGI(TAG, "Received a message from '%s' (%s): %s", peer_type, broadcast ? "broadcast" : "unicast", (char *)data);
-        // EspNowResponse response = EspNowResponse::fromReceivedData(data);
-        // response.print();
         if (on_receive_cb) {
             ESP_LOGD(TAG, "Receive callback triggered for peer: '%s'", peer_type);
             on_receive_cb(data, len, broadcast);
