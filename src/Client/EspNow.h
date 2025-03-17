@@ -54,12 +54,12 @@ typedef struct EspNowMsg {
     // Static method to deserialize from JSON
     static EspNowMsg fromReceivedData(const String data) {
         JsonDocument doc = getJsonFromString(data);
-
         EspNowMsg m;
-        m.topic = doc["topic"].as<String>();
-        m.data = doc["data"].as<String>();
-        m.status = doc["status"];
-
+        if (!doc.isNull()) {
+            m.topic = doc["topic"].as<String>();
+            m.data = doc["data"].as<String>();
+            m.status = doc["status"];
+        }
         return m;
     }
 
