@@ -63,6 +63,15 @@ typedef struct EspNowMsg {
         return m;
     }
 
+    static EspNowMsg fromReceivedRawData(const uint8_t *data) {
+        if (sizeof(data) == 0) {
+            EspNowMsg m;
+            return m;
+        };
+        String d = String((const char*)data);
+        return fromReceivedData(d);
+    }
+
     String toString() {
         JsonDocument m;
         m["topic"] = topic;
