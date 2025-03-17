@@ -33,8 +33,6 @@
 
 #define ESPNOW_PEER_TYPE_DEFAULT "espnow_peer"
 
-static const char *TAG = "ESP_NOW";
-
 typedef struct EspNowMsg {
     String topic;
     String data;
