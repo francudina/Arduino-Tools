@@ -204,7 +204,7 @@ public:
     }
 
     static bool end() {
-        return ESP_NOW.end(peer);
+        return ESP_NOW.end();
     }
 };
 
