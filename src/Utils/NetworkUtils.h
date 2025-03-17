@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef USE_ESP_NOW
+#ifdef USE_NETWORK_UTILS
 
 #include <Arduino.h>
 #include <WiFi.h>
