@@ -202,6 +202,10 @@ public:
     static bool removePeer(ESP_NOW_Peer &peer) {
         return ESP_NOW.removePeer(peer);
     }
+
+    static bool end() {
+        return ESP_NOW.end(peer);
+    }
 };
 
 #endif
