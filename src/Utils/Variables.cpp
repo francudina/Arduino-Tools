@@ -19,18 +19,20 @@ String DeviceVariable::getVariable(const char* pref, const char* var, const char
     return val;
 }
 
-void DeviceVariable::delVariable(const char* pref, const char* var) {
+bool DeviceVariable::delVariable(const char* pref, const char* var) {
     Preferences p;
     p.begin(prefMetadata, false);
-    p.remove(var);
+    bool r = p.remove(var);
     p.end();
+    return r;
 }
 
-void DeviceVariable::clear(const char* pref) {
+bool DeviceVariable::clear(const char* pref) {
     Preferences p;
     p.begin(prefMetadata, false);
-    p.clear();
+    bool c = p.clear();
     p.end();
+    return c;
 }
 
 String DeviceSoftware::getVersion() {

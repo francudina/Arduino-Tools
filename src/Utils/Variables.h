@@ -26,8 +26,8 @@ class DeviceVariable {
     public:    
         static String setVariable(const char* pref, const char* var, const char* val);
         static String getVariable(const char* pref, const char* var, const char* defaultVal = "");
-        static void delVariable(const char* pref, const char* var);
-        static void clear(const char* pref);
+        static bool delVariable(const char* pref, const char* var);
+        static bool clear(const char* pref);
     };
 
 class DeviceSoftware {
