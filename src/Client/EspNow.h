@@ -116,6 +116,15 @@ public:
         return true;
     }
 
+    bool waitPeerToJoin(const int wait) {
+        long s = millis(); bool joined = false;
+        while (!joined && (millis() - s) < wait)  {
+          if (addNewPeer()) joined = true;
+          delay(250);
+        }
+        return joined;
+    }
+
     // Function to send a message to all devices within the network
     bool sendMsg(const uint8_t *data, size_t len) {
         if (!send(data, len)) {
@@ -124,6 +133,18 @@ public:
         }
         ESP_LOGI(TAG, "Message sent to:'%s'", peer_type);
         return true;
+    }
+
+    bool waitMsgToBeSent(const String message, const int wait) {
+        long s = millis(); int i = 0; bool sent = false;
+        while (!message.isEmpty() && !sent && (millis() - s) < wait) {
+            if (sendMsg((const uint8_t *)message.c_str(), message.length())) {
+                sent = true;
+                break;
+            }
+            delay(1000);
+        }
+        return sent;
     }
 
     void onReceive(const uint8_t *data, size_t len, bool broadcast) {
