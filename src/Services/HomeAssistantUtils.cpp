@@ -1,3 +1,5 @@
+#include "HomeAssistantUtils.h"
+
 #ifdef USE_HOMEASSISTANT
 
 #include <ArduinoJson.h>
