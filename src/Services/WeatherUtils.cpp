@@ -10,9 +10,9 @@ float WeatherUtils::fetchCurrentTemperature(const char *param, float latitude, f
         + "?latitude=" + String(latitude, 4) 
         + "&longitude=" + String(longitude, 4) 
         + "&current=" + String(param);
-        
+
     HttpRequestHandler weatherClient(client, weatherServer, weatherServerPort);
-    const JsonDocument doc = weatherClient.performGetRequestAndGetData(url);
+    const JsonDocument doc = weatherClient.performGetRequestAndGetData(url.c_str());
     
     // Extract the current temperature
     float temperature = doc["current"][param];
