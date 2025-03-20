@@ -13,12 +13,13 @@
 // - Open / Weather
 #define weatherServer     "api.open-meteo.com"
 #define weatherServerPort   80
-#define weatherResource   "/v1/forecast?latitude52.52&longitude13.41&currenttemperature_2m"
+#define weatherResource   "/v1/forecast"
+#define weatherResource_param_temperature_2m "temperature_2m"
 #endif
 
 class WeatherUtils {
 public:
-    static float fetchCurrentTemperature(Client& client);
+    static float fetchCurrentTemperature(const char *param, float latitude, float longitude, Client& client);
 };
 
 #endif
