@@ -23,8 +23,6 @@
 #define device_manufacturer     "LilyGo"
 #define device_model            "TTGO T-A7670G R2"
 #define device_hw_version       "v1.3"
-#define device_latitude         1.0
-#define device_longitude        1.0
 #endif
 
 #ifndef HOME_ASSISTANT_CONFIG
