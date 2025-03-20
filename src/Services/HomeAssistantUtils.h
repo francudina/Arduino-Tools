@@ -13,7 +13,9 @@
 #ifdef USE_BATTERY
 #include "../Utils/BatteryUtils.h"
 #endif
+#ifdef USE_WEATHER
 #include "WeatherUtils.h"
+#endif
 
 // Device details
 // - chip
@@ -70,7 +72,9 @@ public:
 #endif
     static bool config_freeFlashSensor(MqttClient &mqttClient);
     static bool config_freeRAMSensor(MqttClient &mqttClient);
+#ifdef USE_WEATHER
     static bool config_temperatureSensor(MqttClient &mqttClient);
+#endif
 
     static bool state_statusSensor(const char *status, MqttClient &mqttClient);
     static bool state_swVersionSensor(MqttClient &mqttClient);
@@ -80,7 +84,9 @@ public:
 #endif
     static bool state_freeFlashSensor(MqttClient &mqttClient);
     static bool state_freeRAMSensor(MqttClient &mqttClient);
+#ifdef USE_WEATHER
     static bool state_temperatureSensor(MqttClient &mqttClient, Client& client);
+#endif
 
 private:
     static bool config_checkAndCreate(const char *unique_id, Preferences &pref);

@@ -18,7 +18,9 @@ void HomeAssistant::config_check(MqttClient &mqttClient) {
 #endif
     if (!config_checkAndCreate(ha_hubNode_freeFlash, pref)) config_freeFlashSensor(mqttClient);
     if (!config_checkAndCreate(ha_hubNode_freeRAM, pref)) config_freeRAMSensor(mqttClient);
+#ifdef USE_WEATHER
     if (!config_checkAndCreate(ha_hubNode_temperature, pref)) config_temperatureSensor(mqttClient);
+#endif
 
     pref.end();
 }
@@ -97,6 +99,7 @@ bool HomeAssistant::config_freeRAMSensor(MqttClient &mqttClient) {
     return config_sensorRegistration(ha_hubNode_freeRam_config, config, mqttClient);
 }
 
+#ifdef USE_WEATHER
 bool HomeAssistant::config_temperatureSensor(MqttClient &mqttClient) {
     JsonDocument config = config_sensorBasicConfig(
         ha_hubNode_temperature,
@@ -108,6 +111,7 @@ bool HomeAssistant::config_temperatureSensor(MqttClient &mqttClient) {
     );
     return config_sensorRegistration(ha_hubNode_temperature_config, config, mqttClient);
 }
+#endif
 
 bool HomeAssistant::state_statusSensor(const char *status, MqttClient &mqttClient) {
     String payload = createPayload("status", status);
@@ -145,11 +149,13 @@ bool HomeAssistant::state_freeRAMSensor(MqttClient &mqttClient) {
     return mqttClient.publish(ha_hubNode_freeRam_state, payload); 
 }
 
+#ifdef USE_WEATHER
 bool HomeAssistant::state_temperatureSensor(MqttClient &mqttClient, Client& client) {
     float temperature = WeatherUtils::fetchCurrentTemperature(client);
     String payload = createPayload("current_temperature", temperature);
     return mqttClient.publish(ha_hubNode_temperature_state, payload); 
 }
+#endif
 
 bool HomeAssistant::config_checkAndCreate(const char *unique_id, Preferences &pref) {
     bool exists = pref.getBool(unique_id, false);
