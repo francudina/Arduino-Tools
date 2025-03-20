@@ -6,7 +6,7 @@ float WeatherUtils::fetchCurrentTemperature(const char *param, float latitude, f
 #ifdef DEVICE_LOGGING
     Serial.println("Weather: Fetching current temperature...");
 #endif
-    String url = weatherResource 
+    String url = String(weatherResource) 
         + "?latitude=" + String(latitude, 4) 
         + "&longitude=" + String(longitude, 4) 
         + "&current=" + String(param);

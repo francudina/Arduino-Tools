@@ -11,9 +11,9 @@
 #ifndef WEATHER_SERVER_CONFIG
 // - Open
 // - Open / Weather
-#define weatherServer     "api.open-meteo.com"
+#define weatherServer       "api.open-meteo.com"
 #define weatherServerPort   80
-#define weatherResource   "/v1/forecast"
+#define weatherResource     "/v1/forecast"
 #define weatherResource_param_temperature_2m "temperature_2m"
 #endif
 
