@@ -24,6 +24,7 @@
         "vshymanskyy/TinyGSM": "^0.11.5",
         "bblanchon/ArduinoJson": "*",
         "knolleary/PubSubClient": "^2.8",
-        "PaulStoffregen/Time": "*"
+        "PaulStoffregen/Time": "*",
+        "arduino-libraries/ArduinoHttpClient": "*"
     }
 }
