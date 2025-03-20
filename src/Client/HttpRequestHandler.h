@@ -14,7 +14,7 @@ public:
     int getResponseStatusCode();
     String getResponseBody();
     void stop();
-    DynamicJsonDocument performGetRequestAndGetData(const char* resource, const size_t numOfKeys);
+    JsonDocument performGetRequestAndGetData(const char* resource, const size_t numOfKeys);
 
 private:
     HttpClient httpClient;
