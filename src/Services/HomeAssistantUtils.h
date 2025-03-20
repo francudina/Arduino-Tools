@@ -85,7 +85,7 @@ public:
     static bool state_freeFlashSensor(MqttClient &mqttClient);
     static bool state_freeRAMSensor(MqttClient &mqttClient);
 #ifdef USE_WEATHER
-    static bool state_temperatureSensor(MqttClient &mqttClient, Client& client);
+    static bool state_temperatureSensor(float latitude, float longitude, MqttClient &mqttClient, Client& client);
 #endif
 
 private:
