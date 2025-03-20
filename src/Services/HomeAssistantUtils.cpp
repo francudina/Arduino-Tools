@@ -13,7 +13,9 @@ void HomeAssistant::config_check(MqttClient &mqttClient) {
     if (!config_checkAndCreate(ha_hubNode_status, pref)) config_statusSensor(mqttClient);
     if (!config_checkAndCreate(ha_hubNode_swVersion, pref)) config_swVersionSensor(mqttClient);
     if (!config_checkAndCreate(ha_hubNode_mac, pref)) config_macSensor(mqttClient);
+#ifdef USE_BATTERY
     if (!config_checkAndCreate(ha_hubNode_batteryVoltage, pref)) config_batteryVoltageSensor(mqttClient);
+#endif
     if (!config_checkAndCreate(ha_hubNode_freeFlash, pref)) config_freeFlashSensor(mqttClient);
     if (!config_checkAndCreate(ha_hubNode_freeRAM, pref)) config_freeRAMSensor(mqttClient);
     if (!config_checkAndCreate(ha_hubNode_temperature, pref)) config_temperatureSensor(mqttClient);
@@ -22,7 +24,7 @@ void HomeAssistant::config_check(MqttClient &mqttClient) {
 }
 
 bool HomeAssistant::config_statusSensor(MqttClient &mqttClient) {
-    DynamicJsonDocument config = config_sensorBasicConfig(
+    JsonDocument config = config_sensorBasicConfig(
         ha_hubNode_status,
         "", 
         ha_hubNode_status,
@@ -34,7 +36,7 @@ bool HomeAssistant::config_statusSensor(MqttClient &mqttClient) {
 }
 
 bool HomeAssistant::config_swVersionSensor(MqttClient &mqttClient) {
-    DynamicJsonDocument config = config_sensorBasicConfig(
+    JsonDocument config = config_sensorBasicConfig(
         ha_hubNode_swVersion,
         "", 
         ha_hubNode_swVersion,
@@ -46,7 +48,7 @@ bool HomeAssistant::config_swVersionSensor(MqttClient &mqttClient) {
 }
 
 bool HomeAssistant::config_macSensor(MqttClient &mqttClient) {
-    DynamicJsonDocument config = config_sensorBasicConfig(
+    JsonDocument config = config_sensorBasicConfig(
         ha_hubNode_mac,
         "", 
         ha_hubNode_mac,
@@ -57,8 +59,9 @@ bool HomeAssistant::config_macSensor(MqttClient &mqttClient) {
     return config_sensorRegistration(ha_hubNode_mac_config, config, mqttClient);
 }
 
+#ifdef USE_BATTERY
 bool HomeAssistant::config_batteryVoltageSensor(MqttClient &mqttClient) {
-    DynamicJsonDocument config = config_sensorBasicConfig(
+    JsonDocument config = config_sensorBasicConfig(
         ha_hubNode_batteryVoltage,
         "", 
         ha_hubNode_batteryVoltage,
@@ -68,9 +71,10 @@ bool HomeAssistant::config_batteryVoltageSensor(MqttClient &mqttClient) {
     );
     return config_sensorRegistration(ha_hubNode_batteryVoltage_config, config, mqttClient);
 }
+#endif
 
 bool HomeAssistant::config_freeFlashSensor(MqttClient &mqttClient) {
-    DynamicJsonDocument config = config_sensorBasicConfig(
+    JsonDocument config = config_sensorBasicConfig(
         ha_hubNode_freeFlash,
         "", 
         ha_hubNode_freeFlash,
@@ -82,7 +86,7 @@ bool HomeAssistant::config_freeFlashSensor(MqttClient &mqttClient) {
 }
 
 bool HomeAssistant::config_freeRAMSensor(MqttClient &mqttClient) {
-    DynamicJsonDocument config = config_sensorBasicConfig(
+    JsonDocument config = config_sensorBasicConfig(
         ha_hubNode_freeRAM,
         "", 
         ha_hubNode_freeRAM,
@@ -94,7 +98,7 @@ bool HomeAssistant::config_freeRAMSensor(MqttClient &mqttClient) {
 }
 
 bool HomeAssistant::config_temperatureSensor(MqttClient &mqttClient) {
-    DynamicJsonDocument config = config_sensorBasicConfig(
+    JsonDocument config = config_sensorBasicConfig(
         ha_hubNode_temperature,
         "temperature", 
         ha_hubNode_temperature,
@@ -121,11 +125,13 @@ bool HomeAssistant::state_macSensor(MqttClient &mqttClient) {
     return mqttClient.publish(ha_hubNode_mac_state, payload); 
 }
 
+#ifdef USE_BATTERY
 bool HomeAssistant::state_batteryVoltageSensor(MqttClient &mqttClient) {
     uint16_t batteryVoltage = BatteryMonitor::readBatteryVoltage();
     String payload = createPayload("battery_voltage", batteryVoltage);
     return mqttClient.publish(ha_hubNode_batteryVoltage_state, payload); 
 }
+#endif
 
 bool HomeAssistant::state_freeFlashSensor(MqttClient &mqttClient) {
     uint32_t freeFlash = Storage::getFreeSketchSpace() / 1024;
@@ -155,30 +161,30 @@ bool HomeAssistant::config_checkAndCreate(const char *unique_id, Preferences &pr
 }
 
 String HomeAssistant::createPayload(const char *key, const char *value) {
-    DynamicJsonDocument payload = createJsonDocument(5);
+    JsonDocument payload = createJsonDocument(5);
     payload[key] = value;
     return getStringFromJson(payload);
 }
 
 String HomeAssistant::createPayload(const char *key, const float value) {
-    DynamicJsonDocument payload = createJsonDocument(5);
+    JsonDocument payload = createJsonDocument(5);
     payload[key] = value;
     return getStringFromJson(payload);
 }
 
 String HomeAssistant::createPayload(const char *key, const int value) {
-    DynamicJsonDocument payload = createJsonDocument(5);
+    JsonDocument payload = createJsonDocument(5);
     payload[key] = value;
     return getStringFromJson(payload);
 }
 
 String HomeAssistant::createPayload(const char *key, const uint32_t value) {
-    DynamicJsonDocument payload = createJsonDocument(5);
+    JsonDocument payload = createJsonDocument(5);
     payload[key] = value;
     return getStringFromJson(payload);
 }
 
-DynamicJsonDocument HomeAssistant::config_sensorBasicConfig(
+JsonDocument HomeAssistant::config_sensorBasicConfig(
     const char* name, 
     const char* device_class, 
     const char* unique_id,
@@ -187,7 +193,7 @@ DynamicJsonDocument HomeAssistant::config_sensorBasicConfig(
     const char* state_topic
 ) {
     // create config object for sensor registration
-    DynamicJsonDocument sensorDoc = createJsonDocument(50);
+    JsonDocument sensorDoc;
     sensorDoc["name"] = name;
     // if (strlen(device_class) != 0) sensorDoc["device_class"] = device_class;
     sensorDoc["unique_id"] = unique_id;
@@ -211,7 +217,7 @@ DynamicJsonDocument HomeAssistant::config_sensorBasicConfig(
 
 bool HomeAssistant::config_sensorRegistration(
     const char* configTopic, 
-    const DynamicJsonDocument &payload, 
+    const JsonDocument &payload, 
     MqttClient &mqttClient
 ) {
     String config = getStringFromJson(payload);

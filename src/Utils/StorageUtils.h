@@ -1,7 +1,8 @@
 #pragma once
 
 #if defined(USE_STORAGE)
-#include <esp_spi_flash.h>
+#include <Arduino.h>
+#include <spi_flash_mmap.h>
 #include <esp_heap_caps.h>
 #include <SPI.h>
 #endif

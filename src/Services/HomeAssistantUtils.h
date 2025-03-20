@@ -7,10 +7,12 @@
 
 #include "../Utils/JsonUtils.h"
 #include "../Client/MqttClient.h"
-#include "../Utils/Versions.h"
+#include "../Utils/Variables.h"
 #include "../Utils/NetworkUtils.h"
 #include "../Utils/StorageUtils.h"
+#ifdef USE_BATTERY
 #include "../Utils/BatteryUtils.h"
+#endif
 #include "WeatherUtils.h"
 
 // Device details
@@ -63,7 +65,9 @@ public:
     static bool config_statusSensor(MqttClient &mqttClient);
     static bool config_swVersionSensor(MqttClient &mqttClient);
     static bool config_macSensor(MqttClient &mqttClient);
+#ifdef USE_BATTERY
     static bool config_batteryVoltageSensor(MqttClient &mqttClient);
+#endif
     static bool config_freeFlashSensor(MqttClient &mqttClient);
     static bool config_freeRAMSensor(MqttClient &mqttClient);
     static bool config_temperatureSensor(MqttClient &mqttClient);
@@ -71,7 +75,9 @@ public:
     static bool state_statusSensor(const char *status, MqttClient &mqttClient);
     static bool state_swVersionSensor(MqttClient &mqttClient);
     static bool state_macSensor(MqttClient &mqttClient);
+#ifdef USE_BATTERY
     static bool state_batteryVoltageSensor(MqttClient &mqttClient);
+#endif
     static bool state_freeFlashSensor(MqttClient &mqttClient);
     static bool state_freeRAMSensor(MqttClient &mqttClient);
     static bool state_temperatureSensor(MqttClient &mqttClient, Client& client);
@@ -84,7 +90,7 @@ private:
     static String createPayload(const char *key, const int value);
     static String createPayload(const char *key, const uint32_t value);
 
-    static DynamicJsonDocument config_sensorBasicConfig(
+    static JsonDocument config_sensorBasicConfig(
         const char* name,
         const char* device_class, 
         const char* unique_id, 
@@ -94,7 +100,7 @@ private:
     );
     static bool config_sensorRegistration(
         const char* configTopic, 
-        const DynamicJsonDocument &payload, 
+        const JsonDocument &payload, 
         MqttClient &mqttClient
     );
 };
