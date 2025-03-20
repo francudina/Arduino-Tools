@@ -7,7 +7,7 @@ float WeatherUtils::fetchCurrentTemperature(Client& client) {
     Serial.println("Weather: Fetching current temperature...");
 #endif
     HttpRequestHandler weatherClient(client, weatherServer, weatherServerPort);
-    const JsonDocument doc = weatherClient.performGetRequestAndGetData(weatherResource, 200);
+    const JsonDocument doc = weatherClient.performGetRequestAndGetData(weatherResource);
     
     // Extract the current temperature
     float temperature = doc["current"]["temperature_2m"];

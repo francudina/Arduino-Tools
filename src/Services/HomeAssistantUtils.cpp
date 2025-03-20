@@ -167,25 +167,25 @@ bool HomeAssistant::config_checkAndCreate(const char *unique_id, Preferences &pr
 }
 
 String HomeAssistant::createPayload(const char *key, const char *value) {
-    JsonDocument payload = createJsonDocument(5);
+    JsonDocument payload = createJsonDocument();
     payload[key] = value;
     return getStringFromJson(payload);
 }
 
 String HomeAssistant::createPayload(const char *key, const float value) {
-    JsonDocument payload = createJsonDocument(5);
+    JsonDocument payload = createJsonDocument();
     payload[key] = value;
     return getStringFromJson(payload);
 }
 
 String HomeAssistant::createPayload(const char *key, const int value) {
-    JsonDocument payload = createJsonDocument(5);
+    JsonDocument payload = createJsonDocument();
     payload[key] = value;
     return getStringFromJson(payload);
 }
 
 String HomeAssistant::createPayload(const char *key, const uint32_t value) {
-    JsonDocument payload = createJsonDocument(5);
+    JsonDocument payload = createJsonDocument();
     payload[key] = value;
     return getStringFromJson(payload);
 }
@@ -208,14 +208,14 @@ JsonDocument HomeAssistant::config_sensorBasicConfig(
     if (strlen(unit_of_measurement) != 0) sensorDoc["unit_of_measurement"] = unit_of_measurement;
     sensorDoc["value_template"] = value_template;
 
-    JsonObject device = sensorDoc.createNestedObject("device");
+    JsonObject device = sensorDoc["device"].to<JsonObject>();
     device["name"] = ha_hubNode;
     device["manufacturer"] = device_manufacturer;
     device["model"] = device_model;
     device["hw_version"] = device_hw_version;
     device["sw_version"] = DeviceSoftware::getVersion();
 
-    JsonArray identifiers = device.createNestedArray("identifiers");
+    JsonArray identifiers = device["identifiers"].to<JsonArray>();
     identifiers.add(ha_hubNode);
 
     return sensorDoc;
