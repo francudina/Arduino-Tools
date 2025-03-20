@@ -21,7 +21,7 @@ void HttpRequestHandler::stop() {
     httpClient.stop();
 }
 
-JsonDocument HttpRequestHandler::performGetRequestAndGetData(const char* resource, const size_t numOfKeys) {
+JsonDocument HttpRequestHandler::performGetRequestAndGetData(const char* resource) {
     int httpCode = performGetRequest(resource);
     int statusCode = getResponseStatusCode();
     
@@ -37,7 +37,7 @@ JsonDocument HttpRequestHandler::performGetRequestAndGetData(const char* resourc
     }
 
     String response = getResponseBody();
-    doc = getJsonFromString(response, numOfKeys);
+    doc = getJsonFromString(response);
     if (isJsonEmpty(doc)) { 
         Serial.printf("HttpRequestHandler: resulted with empty JSON data");
     }
