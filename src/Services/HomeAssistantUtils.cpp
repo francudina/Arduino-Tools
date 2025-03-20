@@ -151,7 +151,7 @@ bool HomeAssistant::state_freeRAMSensor(MqttClient &mqttClient) {
 
 #ifdef USE_WEATHER
 bool HomeAssistant::state_temperatureSensor(MqttClient &mqttClient, Client& client) {
-    float temperature = WeatherUtils::fetchCurrentTemperature(client);
+    float temperature = WeatherUtils::fetchCurrentTemperature(weatherResource_param_temperature_2m, device_latitude, device_longitude, client);
     String payload = createPayload("current_temperature", temperature);
     return mqttClient.publish(ha_hubNode_temperature_state, payload); 
 }
