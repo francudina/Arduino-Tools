@@ -1,114 +1,233 @@
-#include "HomeAssistantUtils.h"
-
 #ifdef USE_HOMEASSISTANT
 
-#include <ArduinoJson.h>
-#include "Preferences.h"
+#include "HomeAssistantUtils.h"
 
-#include "../Utils/JsonUtils.h"
-#include "../Client/MqttClient.h"
-#include "../Utils/Variables.h"
-#include "../Utils/NetworkUtils.h"
-#include "../Utils/StorageUtils.h"
+void HomeAssistant::config_check(MqttClient &mqttClient) {
+    Preferences pref;
+    pref.begin(prefHomeAssistant, false);
+#ifdef HOMEASSISTANT_REGISTER_SENSORS
+    pref.clear();
+#endif
+
+    // check if sensor needs registration/config
+    if (!config_checkAndCreate(ha_hubNode_status, pref)) config_statusSensor(mqttClient);
+    if (!config_checkAndCreate(ha_hubNode_swVersion, pref)) config_swVersionSensor(mqttClient);
+    if (!config_checkAndCreate(ha_hubNode_mac, pref)) config_macSensor(mqttClient);
 #ifdef USE_BATTERY
-#include "../Utils/BatteryUtils.h"
+    if (!config_checkAndCreate(ha_hubNode_batteryVoltage, pref)) config_batteryVoltageSensor(mqttClient);
 #endif
+    if (!config_checkAndCreate(ha_hubNode_freeFlash, pref)) config_freeFlashSensor(mqttClient);
+    if (!config_checkAndCreate(ha_hubNode_freeRAM, pref)) config_freeRAMSensor(mqttClient);
 #ifdef USE_WEATHER
-#include "WeatherUtils.h"
+    if (!config_checkAndCreate(ha_hubNode_temperature, pref)) config_temperatureSensor(mqttClient);
 #endif
 
-// Device details
-// - chip
-#ifndef DEVICE_DETAILS
-#define device_manufacturer     "LilyGo"
-#define device_model            "TTGO T-A7670G R2"
-#define device_hw_version       "v1.3"
-#endif
+    pref.end();
+}
 
-#ifndef HOME_ASSISTANT_CONFIG
-// - Homeassistant Config
-// - Homeassistant Config / Groups
-#define ha_areaGroup               "PakostaneSensors"
-#define ha_hubNode                 "Pakostane_HubNode"
-// - Homeassistant Config / Sensors (object ids / unique ids)
-#define ha_hubNode_status          "HN_Status"
-#define ha_hubNode_swVersion       "HN_SwVersion"
-#define ha_hubNode_mac             "HN_Mac"
-#define ha_hubNode_batteryVoltage  "HN_BatteryV"
-#define ha_hubNode_freeFlash       "HN_FreeFlash"
-#define ha_hubNode_freeRAM         "HN_FreeRAM"
-#define ha_hubNode_temperature     "HN_Temperature"
-// - Homeassistant Config / Sensors (object ids) / Config Topics
-#define ha_hubNode_status_config           "homeassistant/sensor/Pakostane_HubNode_Status/config"
-#define ha_hubNode_swVersion_config        "homeassistant/sensor/Pakostane_HubNode_SwVersion/config"
-#define ha_hubNode_mac_config              "homeassistant/sensor/Pakostane_HubNode_Mac/config"
-#define ha_hubNode_batteryVoltage_config   "homeassistant/sensor/Pakostane_HubNode_BatteryVoltage/config"
-#define ha_hubNode_freeFlash_config        "homeassistant/sensor/Pakostane_HubNode_FreeFlash/config"
-#define ha_hubNode_freeRam_config          "homeassistant/sensor/Pakostane_HubNode_FreeRAM/config"
-#define ha_hubNode_temperature_config      "homeassistant/sensor/Pakostane_HubNode_Temperature/config"
-// - Homeassistant Config / Sensors (object ids) / State Topics
-#define ha_hubNode_status_state            "homeassistant/sensor/Pakostane_HubNode_Status/state"
-#define ha_hubNode_swVersion_state         "homeassistant/sensor/Pakostane_HubNode_SwVersion/state"
-#define ha_hubNode_mac_state               "homeassistant/sensor/Pakostane_HubNode_Mac/state"
-#define ha_hubNode_batteryVoltage_state    "homeassistant/sensor/Pakostane_HubNode_BatteryVoltage/state"
-#define ha_hubNode_freeFlash_state         "homeassistant/sensor/Pakostane_HubNode_FreeFlash/state"
-#define ha_hubNode_freeRam_state           "homeassistant/sensor/Pakostane_HubNode_FreeRAM/state"
-#define ha_hubNode_temperature_state       "homeassistant/sensor/Pakostane_HubNode_Temperature/state"
-// - Homeassistant / Subscriptions
-#define ha_hubNode_data                    "homeassistant/Pakostane_HubNode/data"
-// - Homeassistant / Preferences config
-#define prefHomeAssistant                   "HomeAssistant"
-#endif
-
-class HomeAssistant {
-public:
-    static void config_check(MqttClient &mqttClient);
-
-    static bool config_statusSensor(MqttClient &mqttClient);
-    static bool config_swVersionSensor(MqttClient &mqttClient);
-    static bool config_macSensor(MqttClient &mqttClient);
-#ifdef USE_BATTERY
-    static bool config_batteryVoltageSensor(MqttClient &mqttClient);
-#endif
-    static bool config_freeFlashSensor(MqttClient &mqttClient);
-    static bool config_freeRAMSensor(MqttClient &mqttClient);
-#ifdef USE_WEATHER
-    static bool config_temperatureSensor(MqttClient &mqttClient);
-#endif
-
-    static bool state_statusSensor(const char *status, MqttClient &mqttClient);
-    static bool state_swVersionSensor(MqttClient &mqttClient);
-    static bool state_macSensor(MqttClient &mqttClient);
-#ifdef USE_BATTERY
-    static bool state_batteryVoltageSensor(MqttClient &mqttClient);
-#endif
-    static bool state_freeFlashSensor(MqttClient &mqttClient);
-    static bool state_freeRAMSensor(MqttClient &mqttClient);
-#ifdef USE_WEATHER
-    static bool state_temperatureSensor(float latitude, float longitude, MqttClient &mqttClient, Client& client);
-#endif
-
-private:
-    static bool config_checkAndCreate(const char *unique_id, Preferences &pref);
-
-    static String createPayload(const char *key, const char *value);
-    static String createPayload(const char *key, const float value);
-    static String createPayload(const char *key, const int value);
-    static String createPayload(const char *key, const uint32_t value);
-
-    static JsonDocument config_sensorBasicConfig(
-        const char* name,
-        const char* device_class, 
-        const char* unique_id, 
-        const char* value_template,
-        const char* unit_of_measurement,
-        const char* state_topic
+bool HomeAssistant::config_statusSensor(MqttClient &mqttClient) {
+    JsonDocument config = config_sensorBasicConfig(
+        ha_hubNode_status,
+        "", 
+        ha_hubNode_status,
+        "{{ value_json.status }}",
+        "",
+        ha_hubNode_status_state
     );
-    static bool config_sensorRegistration(
-        const char* configTopic, 
-        const JsonDocument &payload, 
-        MqttClient &mqttClient
+    return config_sensorRegistration(ha_hubNode_status_config, config, mqttClient);
+}
+
+bool HomeAssistant::config_swVersionSensor(MqttClient &mqttClient) {
+    JsonDocument config = config_sensorBasicConfig(
+        ha_hubNode_swVersion,
+        "", 
+        ha_hubNode_swVersion,
+        "{{ value_json.sw_version }}",
+        "",
+        ha_hubNode_swVersion_state
     );
-};
+    return config_sensorRegistration(ha_hubNode_swVersion_config, config, mqttClient);
+}
+
+bool HomeAssistant::config_macSensor(MqttClient &mqttClient) {
+    JsonDocument config = config_sensorBasicConfig(
+        ha_hubNode_mac,
+        "", 
+        ha_hubNode_mac,
+        "{{ value_json.mac_address }}",
+        "",
+        ha_hubNode_mac_state
+    );
+    return config_sensorRegistration(ha_hubNode_mac_config, config, mqttClient);
+}
+
+#ifdef USE_BATTERY
+bool HomeAssistant::config_batteryVoltageSensor(MqttClient &mqttClient) {
+    JsonDocument config = config_sensorBasicConfig(
+        ha_hubNode_batteryVoltage,
+        "", 
+        ha_hubNode_batteryVoltage,
+        "{{ value_json.battery_voltage }}",
+        "mV",
+        ha_hubNode_batteryVoltage_state
+    );
+    return config_sensorRegistration(ha_hubNode_batteryVoltage_config, config, mqttClient);
+}
+#endif
+
+bool HomeAssistant::config_freeFlashSensor(MqttClient &mqttClient) {
+    JsonDocument config = config_sensorBasicConfig(
+        ha_hubNode_freeFlash,
+        "", 
+        ha_hubNode_freeFlash,
+        "{{ value_json.free_flash }}",
+        "KB",
+        ha_hubNode_freeFlash_state
+    );
+    return config_sensorRegistration(ha_hubNode_freeFlash_config, config, mqttClient);
+}
+
+bool HomeAssistant::config_freeRAMSensor(MqttClient &mqttClient) {
+    JsonDocument config = config_sensorBasicConfig(
+        ha_hubNode_freeRAM,
+        "", 
+        ha_hubNode_freeRAM,
+        "{{ value_json.free_ram }}",
+        "KB",
+        ha_hubNode_freeRam_state
+    );
+    return config_sensorRegistration(ha_hubNode_freeRam_config, config, mqttClient);
+}
+
+#ifdef USE_WEATHER
+bool HomeAssistant::config_temperatureSensor(MqttClient &mqttClient) {
+    JsonDocument config = config_sensorBasicConfig(
+        ha_hubNode_temperature,
+        "temperature", 
+        ha_hubNode_temperature,
+        "{{ value_json.current_temperature }}",
+        "°C",
+        ha_hubNode_temperature_state
+    );
+    return config_sensorRegistration(ha_hubNode_temperature_config, config, mqttClient);
+}
+#endif
+
+bool HomeAssistant::state_statusSensor(const char *status, MqttClient &mqttClient) {
+    String payload = createPayload("status", status);
+    return mqttClient.publish(ha_hubNode_status_state, payload); 
+}
+
+bool HomeAssistant::state_swVersionSensor(MqttClient &mqttClient) {
+    String payload = createPayload("sw_version", DeviceSoftware::getVersion().c_str());
+    return mqttClient.publish(ha_hubNode_swVersion_state, payload); 
+}
+
+bool HomeAssistant::state_macSensor(MqttClient &mqttClient) {
+    uint8_t* macAddress = MacUtils::getDeviceMacAddress();
+    String payload = createPayload("mac_address", MacUtils::getMacAddressString(macAddress).c_str());
+    return mqttClient.publish(ha_hubNode_mac_state, payload); 
+}
+
+#ifdef USE_BATTERY
+bool HomeAssistant::state_batteryVoltageSensor(MqttClient &mqttClient) {
+    uint16_t batteryVoltage = BatteryMonitor::readBatteryVoltage();
+    String payload = createPayload("battery_voltage", batteryVoltage);
+    return mqttClient.publish(ha_hubNode_batteryVoltage_state, payload); 
+}
+#endif
+
+bool HomeAssistant::state_freeFlashSensor(MqttClient &mqttClient) {
+    uint32_t freeFlash = Storage::getFreeSketchSpace() / 1024;
+    String payload = createPayload("free_flash", freeFlash);
+    return mqttClient.publish(ha_hubNode_freeFlash_state, payload); 
+}
+
+bool HomeAssistant::state_freeRAMSensor(MqttClient &mqttClient) {
+    uint32_t freeRAM = Storage::getFreeHeap() / 1024;
+    String payload = createPayload("free_ram", freeRAM);
+    return mqttClient.publish(ha_hubNode_freeRam_state, payload); 
+}
+
+#ifdef USE_WEATHER
+bool HomeAssistant::state_temperatureSensor(float latitude, float longitude, MqttClient &mqttClient, Client& client) {
+    float temperature = WeatherUtils::fetchCurrentTemperature(weatherResource_param_temperature_2m, latitude, longitude, client);
+    String payload = createPayload("current_temperature", temperature);
+    return mqttClient.publish(ha_hubNode_temperature_state, payload); 
+}
+#endif
+
+bool HomeAssistant::config_checkAndCreate(const char *unique_id, Preferences &pref) {
+    bool exists = pref.getBool(unique_id, false);
+    Serial.printf("HomeAssistant: Device uid: '%s' already configured? %s\n", unique_id, exists ? "true" : "false");
+    if (exists) { return true; }
+
+    pref.putBool(unique_id, true);
+    return false;
+}
+
+String HomeAssistant::createPayload(const char *key, const char *value) {
+    JsonDocument payload = createJsonDocument();
+    payload[key] = value;
+    return getStringFromJson(payload);
+}
+
+String HomeAssistant::createPayload(const char *key, const float value) {
+    JsonDocument payload = createJsonDocument();
+    payload[key] = value;
+    return getStringFromJson(payload);
+}
+
+String HomeAssistant::createPayload(const char *key, const int value) {
+    JsonDocument payload = createJsonDocument();
+    payload[key] = value;
+    return getStringFromJson(payload);
+}
+
+String HomeAssistant::createPayload(const char *key, const uint32_t value) {
+    JsonDocument payload = createJsonDocument();
+    payload[key] = value;
+    return getStringFromJson(payload);
+}
+
+JsonDocument HomeAssistant::config_sensorBasicConfig(
+    const char* name, 
+    const char* device_class, 
+    const char* unique_id,
+    const char* value_template,
+    const char* unit_of_measurement,
+    const char* state_topic
+) {
+    // create config object for sensor registration
+    JsonDocument sensorDoc;
+    sensorDoc["name"] = name;
+    // if (strlen(device_class) != 0) sensorDoc["device_class"] = device_class;
+    sensorDoc["unique_id"] = unique_id;
+    sensorDoc["state_topic"] = state_topic;
+    
+    if (strlen(unit_of_measurement) != 0) sensorDoc["unit_of_measurement"] = unit_of_measurement;
+    sensorDoc["value_template"] = value_template;
+
+    JsonObject device = sensorDoc["device"].to<JsonObject>();
+    device["name"] = ha_hubNode;
+    device["manufacturer"] = device_manufacturer;
+    device["model"] = device_model;
+    device["hw_version"] = device_hw_version;
+    device["sw_version"] = DeviceSoftware::getVersion();
+
+    JsonArray identifiers = device["identifiers"].to<JsonArray>();
+    identifiers.add(ha_hubNode);
+
+    return sensorDoc;
+}
+
+bool HomeAssistant::config_sensorRegistration(
+    const char* configTopic, 
+    const JsonDocument &payload, 
+    MqttClient &mqttClient
+) {
+    String config = getStringFromJson(payload);
+    return mqttClient.publish(configTopic, config);
+}
 
 #endif
