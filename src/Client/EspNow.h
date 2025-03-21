@@ -148,17 +148,17 @@ public:
     }
 
     void onReceive(const uint8_t *data, size_t len, bool broadcast) {
-        ESP_LOGI(TAG, "Received a message from '%s' (%s): %s", peer_type, broadcast ? "broadcast" : "unicast", (char *)data);
+        ESP_LOGD(TAG, "Received a message from '%s' (%s): %s", peer_type, broadcast ? "broadcast" : "unicast", (char *)data);
         if (on_receive_cb) {
-            ESP_LOGD(TAG, "Receive callback triggered for peer: '%s'", peer_type);
+            ESP_LOGV(TAG, "Receive callback triggered for peer: '%s'", peer_type);
             on_receive_cb(data, len, broadcast);
         }
     }
 
     void onSent(bool success) {
-        ESP_LOGI(TAG, "Message transmission to peer '%s' %s", peer_type, success ? "successful" : "failed");
+        ESP_LOGD(TAG, "Message transmission to peer '%s' %s", peer_type, success ? "successful" : "failed");
         if (on_sent_cb) {
-            ESP_LOGD(TAG, "Send callback triggered for peer: '%s'", peer_type);
+            ESP_LOGV(TAG, "Send callback triggered for peer: '%s'", peer_type);
             on_sent_cb(success);
         }
     }
