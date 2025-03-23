@@ -4,20 +4,62 @@
 
 ModemManager::ModemManager() : modem(SerialAT) { }
 
+/*
+    Example: https://github.com/Xinyuan-LilyGO/LilyGO-T-A76XX/blob/main/examples/ModemSleep/ModemSleep.ino
+*/
 bool ModemManager::modemInit() {
     Serial.println("Modem: modem init...");
     SerialAT.begin(MODEM_BAUD, SERIAL_8N1, MODEM_RX_PIN, MODEM_TX_PIN);
 
-    bool modemBoot;
     bool wakeUpCause = esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_TIMER;
-    if (wakeUpCause) {
-        modemBoot = wakeupFromSleepMode();
-    } else {
-        pinMode(MODEM_PWR_PIN, OUTPUT);
-        digitalWrite(MODEM_PWR_PIN, HIGH);
+    Serial.printf("Modem: Woken up with timer from sleep: %s\n", wakeUpCause ? "TRUE" : "FALSE");
+
+//     // Turn on DC boost to power on the modem
+#ifdef BOARD_POWERON_PIN
+    pinMode(BOARD_POWERON_PIN, OUTPUT);
+    digitalWrite(BOARD_POWERON_PIN, HIGH);
+    Serial.println("Modem: Powering on the modem through POWERON pin");
+#endif
+
+    delay(2000);
+#ifdef MODEM_RESET_PIN
+    // Release reset GPIO hold
+    gpio_hold_dis((gpio_num_t)MODEM_RESET_PIN);
+
+    // Set modem reset pin ,reset modem
+    // The module will also be started during reset.
+    Serial.println("Modem: Setting Reset Pin");
+    pinMode(MODEM_RESET_PIN, OUTPUT);
+    digitalWrite(MODEM_RESET_PIN, !MODEM_RESET_LEVEL); delay(100);
+    digitalWrite(MODEM_RESET_PIN, MODEM_RESET_LEVEL); delay(2600);
+    digitalWrite(MODEM_RESET_PIN, !MODEM_RESET_LEVEL);
+#endif
+
+    pinMode(MODEM_DTR_PIN, OUTPUT);
+    digitalWrite(MODEM_DTR_PIN, LOW);
+
+    Serial.println("Modem: Power on the modem PWRKEY.");
+    pinMode(BOARD_PWRKEY_PIN, OUTPUT);
+    digitalWrite(BOARD_PWRKEY_PIN, LOW);
+    delay(100);
+    digitalWrite(BOARD_PWRKEY_PIN, HIGH);
+    //Ton >= 100 <= 500
+    delay(300);
+    digitalWrite(BOARD_PWRKEY_PIN, LOW);
+
+    // Pull up DTR to put the modem into sleep
+    pinMode(MODEM_DTR_PIN, OUTPUT);
+    digitalWrite(MODEM_DTR_PIN, HIGH);
+
+    delay(2000);
+
+    Serial.println("Modem: Check if modem is online...");
+    while (!modem.testAT()) {
         delay(500);
-        modemBoot = isModemOnline();
     }
+    bool modemBoot = modem.testAT();
+    Serial.printf("Modem: Modem is %s\n", modemBoot ? "ONLINE" : "OFFLINE");
+
     Serial.printf("Modem: modem init%s: %s\n",
         wakeUpCause ? " WAKEUP from sleep" : "",
         modemBoot ? "success" : "fail");
@@ -97,58 +139,48 @@ void ModemManager::disconnectFromNetwork() {
 #if TINY_GSM_USE_GPRS
     modem.gprsDisconnect();
     // shut down modem pwr
-    digitalWrite(MODEM_PWR_PIN, LOW);
+    digitalWrite(BOARD_POWERON_PIN, LOW);
     Serial.println(F("Modem: GPRS disconnected"));
 #endif
-    Serial.println("Modem: disconnecting from network: done");
+    Serial.println("Modem: Disconnecting from network: done");
 }
 
 /*
     Example: https://github.com/Xinyuan-LilyGO/LilyGO-T-A76XX/blob/main/examples/ModemSleep/ModemSleep.ino
 */
 bool ModemManager::enterSleepMode() {
-    // Pull up DTR to put the modem into sleep
-    pinMode(MODEM_DTR_PIN, OUTPUT);
-    digitalWrite(MODEM_DTR_PIN, HIGH);
-    // Set DTR to keep at high level, if not set, DTR will be invalid after ESP32 goes to sleep.
-    gpio_hold_en((gpio_num_t) MODEM_DTR_PIN);
-    gpio_deep_sleep_hold_en();
-    delay(500);
+    Serial.println("Modem: Entering modem power off...");
 
-    bool wentToSleep = modem.sleepEnable(true);
-    Serial.printf("Modem: Modem went to sleep: %s\n", wentToSleep ? "success" : "failed");
-    
-    gpio_hold_en((gpio_num_t) MODEM_PWR_PIN);
+    bool poweroff = modem.poweroff();
+    Serial.printf("Modem: Modem entered POWER OFF modem: %s\n", poweroff ? "SUCCESS" : "FAIL");
+
+    delay(2000);
+
+    Serial.println("Modem: Checking modem response...");
+    while (modem.testAT()) {
+        delay(500);
+    }
+    bool wentToSleep = !modem.testAT();
+    Serial.printf("Modem: Modem has enterd POWER OFF: %s\n", wentToSleep ? "TRUE" : "FALSE");
+
+    delay(2000);
+
+#ifdef BOARD_POWERON_PIN
+    // Turn on DC boost to power off the modem
+    digitalWrite(BOARD_POWERON_PIN, LOW);
+#endif
+
+#ifdef MODEM_RESET_PIN
+    // Keep it low during the sleep period. If the module uses GPIO5 as reset, 
+    // there will be a pulse when waking up from sleep that will cause the module to start directly.
+    // https://github.com/Xinyuan-LilyGO/LilyGO-T-A76XX/issues/85
+    digitalWrite(MODEM_RESET_PIN, !MODEM_RESET_LEVEL);
+    gpio_hold_en((gpio_num_t)MODEM_RESET_PIN);
     gpio_deep_sleep_hold_en();
+#endif
 
     // false means entered sleep mode!
-    return !isModemOnline();
-}
-
-/*
-    Example: https://github.com/Xinyuan-LilyGO/LilyGO-T-A76XX/blob/main/examples/ModemSleep/ModemSleep.ino
-*/
-bool ModemManager::wakeupFromSleepMode() {
-     // Need to cancel GPIO hold if wake from sleep
-    gpio_hold_dis((gpio_num_t) MODEM_DTR_PIN);
-    // Need to cancel GPIO hold if wake from sleep
-    gpio_hold_dis((gpio_num_t) MODEM_PWR_PIN);
-
-    // Turn on DC boost to power on the modem
-    pinMode(MODEM_PWR_PIN, OUTPUT);
-    digitalWrite(MODEM_PWR_PIN, HIGH);
-    // Pull down DTR to wake up MODEM
-    pinMode(MODEM_DTR_PIN, OUTPUT);
-    digitalWrite(MODEM_DTR_PIN, LOW);
-    delay(200);
-
-    bool wokenUp = modem.sleepEnable(false);
-    Serial.printf("Modem: Modem has woken up from sleep: %s\n", wokenUp ? "success" : "failed");
-
-    // Delay sometime ...
-    delay(500);
-    // true means exited sleep mode!
-    return isModemOnline();
+    return wentToSleep;
 }
 
 /*

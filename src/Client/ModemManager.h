@@ -14,6 +14,10 @@
 // Set serial for AT commands (to the module)
 #define SerialAT Serial1
 
+#ifndef TINY_GSM_FORK_LIBRARY
+#error "No correct definition detected, Please copy all the [lib directories](https://github.com/Xinyuan-LilyGO/LilyGO-T-A76XX/tree/main/lib) to the arduino libraries directory , See README"
+#endif
+
 // Select your modem
 // #define TINY_GSM_MODEM_SIM7600
 #ifndef TINY_GSM_MODEM_SIM7600
@@ -22,11 +26,23 @@
 
 // LilyGO T-SIM7000G Pinout
 // T-A7670-ESP32  DeepSleep ~ 157 uA
-#define MODEM_BAUD    115200
-#define MODEM_DTR_PIN 25
-#define MODEM_TX_PIN  26
-#define MODEM_RX_PIN  27
-#define MODEM_PWR_PIN 4
+#define MODEM_BAUD              115200
+#define MODEM_DTR_PIN           25
+#define MODEM_TX_PIN            26
+#define MODEM_RX_PIN            27
+// The modem boot pin needs to follow the startup sequence.
+#define BOARD_PWRKEY_PIN        4
+#define BOARD_ADC_PIN           35
+// The modem power switch must be set to HIGH for the modem to supply power.
+#define BOARD_POWERON_PIN       12
+#define MODEM_RING_PIN          33
+#define MODEM_RESET_PIN         5
+#define BOARD_MISO_PIN          2
+#define BOARD_MOSI_PIN          15
+#define BOARD_SCK_PIN           14
+#define BOARD_SD_CS_PIN         13
+#define BOARD_BAT_ADC_PIN       35
+#define MODEM_RESET_LEVEL       HIGH
 
 // Increase RX buffer to capture the entire response
 // Chips without internal buffering (A6/A7, ESP8266, M590)
@@ -113,7 +129,6 @@ private:
     TinyGsm modem;
 
     bool waitForNetwork();
-    bool wakeupFromSleepMode();
 };
 
 #endif
