@@ -21,7 +21,7 @@
         "libArchive": false
     },
     "dependencies": {
-        "vshymanskyy/TinyGSM": "^0.11.5",
+        "Xinyuan-LilyGO/LilyGO-T-A76XX": "*",
         "bblanchon/ArduinoJson": "*",
         "knolleary/PubSubClient": "^2.8",
         "PaulStoffregen/Time": "*",
