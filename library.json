@@ -21,7 +21,7 @@
         "libArchive": false
     },
     "dependencies": {
-        "external-repo": "https://github.com/lewisxhe/TinyGSM-fork",
+        "TinyGSM-fork": "https://github.com/lewisxhe/TinyGSM-fork",
         "bblanchon/ArduinoJson": "*",
         "knolleary/PubSubClient": "^2.8",
         "PaulStoffregen/Time": "*",
