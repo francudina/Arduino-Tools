@@ -57,7 +57,7 @@ bool ModemManager::modemInit() {
     while (!modem.testAT()) {
         delay(500);
     }
-    bool modemBoot = modem.testAT();
+    bool modemBoot = modem.testAT(1000);
     Serial.printf("Modem: Modem is %s\n", modemBoot ? "ONLINE" : "OFFLINE");
 
     Serial.printf("Modem: modem init%s: %s\n",
@@ -157,10 +157,10 @@ bool ModemManager::enterSleepMode() {
     delay(2000);
 
     Serial.println("Modem: Checking modem response...");
-    while (modem.testAT()) {
+    while (modem.testAT(1000)) {
         delay(500);
     }
-    bool wentToSleep = !modem.testAT();
+    bool wentToSleep = !modem.testAT(1000);
     Serial.printf("Modem: Modem has enterd POWER OFF: %s\n", wentToSleep ? "TRUE" : "FALSE");
 
     delay(2000);
