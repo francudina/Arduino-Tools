@@ -1,7 +1,9 @@
 #ifdef USE_BATTERY
 
 #include "BatteryUtils.h"
-
+/*
+    https://github.com/Xinyuan-LilyGO/LilyGO-T-A76XX/blob/main/examples/ReadBattery/ReadBattery.ino
+*/
 uint16_t BatteryMonitor::readVoltage(uint8_t pin) {
     uint32_t battery_voltage = analogReadMilliVolts(pin);
     battery_voltage *= 2;
