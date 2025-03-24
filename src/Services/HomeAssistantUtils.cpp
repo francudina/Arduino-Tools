@@ -18,6 +18,7 @@ void HomeAssistant::config_check(MqttClient &mqttClient) {
 #endif
     if (!config_checkAndCreate(ha_hubNode_freeFlash, pref)) config_freeFlashSensor(mqttClient);
     if (!config_checkAndCreate(ha_hubNode_freeRAM, pref)) config_freeRAMSensor(mqttClient);
+    if (!config_checkAndCreate(ha_hubNode_signalQuality, pref)) config_signalQualitySensor(mqttClient);
 #ifdef USE_WEATHER
     if (!config_checkAndCreate(ha_hubNode_temperature, pref)) config_temperatureSensor(mqttClient);
 #endif
@@ -99,6 +100,18 @@ bool HomeAssistant::config_freeRAMSensor(MqttClient &mqttClient) {
     return config_sensorRegistration(ha_hubNode_freeRam_config, config, mqttClient);
 }
 
+bool HomeAssistant::config_signalQualitySensor(MqttClient &mqttClient) {
+    JsonDocument config = config_sensorBasicConfig(
+        ha_hubNode_signalQuality,
+        "", 
+        ha_hubNode_signalQuality,
+        "{{ value_json.signal_quality }}",
+        "dBm",
+        ha_hubNode_signalQuality_state
+    );
+    return config_sensorRegistration(ha_hubNode_signalQuality_config, config, mqttClient);
+}
+
 #ifdef USE_WEATHER
 bool HomeAssistant::config_temperatureSensor(MqttClient &mqttClient) {
     JsonDocument config = config_sensorBasicConfig(
@@ -147,6 +160,11 @@ bool HomeAssistant::state_freeRAMSensor(MqttClient &mqttClient) {
     uint32_t freeRAM = Storage::getFreeHeap() / 1024;
     String payload = createPayload("free_ram", freeRAM);
     return mqttClient.publish(ha_hubNode_freeRam_state, payload); 
+}
+
+bool HomeAssistant::state_signalQualitySensor(const int sigQuality, MqttClient &mqttClient) {
+    String payload = createPayload("signal_quality", sigQuality);
+    return mqttClient.publish(ha_hubNode_signalQuality_state, payload); 
 }
 
 #ifdef USE_WEATHER

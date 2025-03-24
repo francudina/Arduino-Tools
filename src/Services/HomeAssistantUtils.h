@@ -28,34 +28,37 @@
 #ifndef HOME_ASSISTANT_CONFIG
 // - Homeassistant Config
 // - Homeassistant Config / Groups
-#define ha_areaGroup               "PakostaneSensors"
-#define ha_hubNode                 "Pakostane_HubNode"
+#define ha_areaGroup                "PakostaneSensors"
+#define ha_hubNode                  "Pakostane_HubNode"
 // - Homeassistant Config / Sensors (object ids / unique ids)
-#define ha_hubNode_status          "HN_Status"
-#define ha_hubNode_swVersion       "HN_SwVersion"
-#define ha_hubNode_mac             "HN_Mac"
-#define ha_hubNode_batteryVoltage  "HN_BatteryV"
-#define ha_hubNode_freeFlash       "HN_FreeFlash"
-#define ha_hubNode_freeRAM         "HN_FreeRAM"
-#define ha_hubNode_temperature     "HN_Temperature"
+#define ha_hubNode_status           "HN_Status"
+#define ha_hubNode_swVersion        "HN_SwVersion"
+#define ha_hubNode_mac              "HN_Mac"
+#define ha_hubNode_batteryVoltage   "HN_BatteryV"
+#define ha_hubNode_freeFlash        "HN_FreeFlash"
+#define ha_hubNode_freeRAM          "HN_FreeRAM"
+#define ha_hubNode_signalQuality    "HN_SignalQuality"
+#define ha_hubNode_temperature      "HN_Temperature"
 // - Homeassistant Config / Sensors (object ids) / Config Topics
-#define ha_hubNode_status_config           "homeassistant/sensor/Pakostane_HubNode_Status/config"
-#define ha_hubNode_swVersion_config        "homeassistant/sensor/Pakostane_HubNode_SwVersion/config"
-#define ha_hubNode_mac_config              "homeassistant/sensor/Pakostane_HubNode_Mac/config"
-#define ha_hubNode_batteryVoltage_config   "homeassistant/sensor/Pakostane_HubNode_BatteryVoltage/config"
-#define ha_hubNode_freeFlash_config        "homeassistant/sensor/Pakostane_HubNode_FreeFlash/config"
-#define ha_hubNode_freeRam_config          "homeassistant/sensor/Pakostane_HubNode_FreeRAM/config"
-#define ha_hubNode_temperature_config      "homeassistant/sensor/Pakostane_HubNode_Temperature/config"
+#define ha_hubNode_status_config            "homeassistant/sensor/Pakostane_HubNode_Status/config"
+#define ha_hubNode_swVersion_config         "homeassistant/sensor/Pakostane_HubNode_SwVersion/config"
+#define ha_hubNode_mac_config               "homeassistant/sensor/Pakostane_HubNode_Mac/config"
+#define ha_hubNode_batteryVoltage_config    "homeassistant/sensor/Pakostane_HubNode_BatteryVoltage/config"
+#define ha_hubNode_freeFlash_config         "homeassistant/sensor/Pakostane_HubNode_FreeFlash/config"
+#define ha_hubNode_freeRam_config           "homeassistant/sensor/Pakostane_HubNode_FreeRAM/config"
+#define ha_hubNode_signalQuality_config     "homeassistant/sensor/Pakostane_HubNode_SignalQuality/config"
+#define ha_hubNode_temperature_config       "homeassistant/sensor/Pakostane_HubNode_Temperature/config"
 // - Homeassistant Config / Sensors (object ids) / State Topics
-#define ha_hubNode_status_state            "homeassistant/sensor/Pakostane_HubNode_Status/state"
-#define ha_hubNode_swVersion_state         "homeassistant/sensor/Pakostane_HubNode_SwVersion/state"
-#define ha_hubNode_mac_state               "homeassistant/sensor/Pakostane_HubNode_Mac/state"
-#define ha_hubNode_batteryVoltage_state    "homeassistant/sensor/Pakostane_HubNode_BatteryVoltage/state"
-#define ha_hubNode_freeFlash_state         "homeassistant/sensor/Pakostane_HubNode_FreeFlash/state"
-#define ha_hubNode_freeRam_state           "homeassistant/sensor/Pakostane_HubNode_FreeRAM/state"
-#define ha_hubNode_temperature_state       "homeassistant/sensor/Pakostane_HubNode_Temperature/state"
+#define ha_hubNode_status_state             "homeassistant/sensor/Pakostane_HubNode_Status/state"
+#define ha_hubNode_swVersion_state          "homeassistant/sensor/Pakostane_HubNode_SwVersion/state"
+#define ha_hubNode_mac_state                "homeassistant/sensor/Pakostane_HubNode_Mac/state"
+#define ha_hubNode_batteryVoltage_state     "homeassistant/sensor/Pakostane_HubNode_BatteryVoltage/state"
+#define ha_hubNode_freeFlash_state          "homeassistant/sensor/Pakostane_HubNode_FreeFlash/state"
+#define ha_hubNode_freeRam_state            "homeassistant/sensor/Pakostane_HubNode_FreeRAM/state"
+#define ha_hubNode_signalQuality_state      "homeassistant/sensor/Pakostane_HubNode_SignalQuality/state"
+#define ha_hubNode_temperature_state        "homeassistant/sensor/Pakostane_HubNode_Temperature/state"
 // - Homeassistant / Subscriptions
-#define ha_hubNode_data                    "homeassistant/Pakostane_HubNode/data"
+#define ha_hubNode_data                     "homeassistant/Pakostane_HubNode/data"
 // - Homeassistant / Preferences config
 #define prefHomeAssistant                   "HomeAssistant"
 #endif
@@ -72,6 +75,7 @@ public:
 #endif
     static bool config_freeFlashSensor(MqttClient &mqttClient);
     static bool config_freeRAMSensor(MqttClient &mqttClient);
+    static bool config_signalQualitySensor(MqttClient &mqttClient);
 #ifdef USE_WEATHER
     static bool config_temperatureSensor(MqttClient &mqttClient);
 #endif
@@ -84,6 +88,7 @@ public:
 #endif
     static bool state_freeFlashSensor(MqttClient &mqttClient);
     static bool state_freeRAMSensor(MqttClient &mqttClient);
+    static bool state_signalQualitySensor(const int sigQuality, MqttClient &mqttClient);
 #ifdef USE_WEATHER
     static bool state_temperatureSensor(float latitude, float longitude, MqttClient &mqttClient, Client& client);
 #endif
