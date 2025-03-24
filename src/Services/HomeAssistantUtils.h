@@ -84,7 +84,7 @@ public:
     static bool state_swVersionSensor(MqttClient &mqttClient);
     static bool state_macSensor(MqttClient &mqttClient);
 #ifdef USE_BATTERY
-    static bool state_batteryVoltageSensor(MqttClient &mqttClient);
+    static bool state_batteryVoltageSensor(uint8_t pin, MqttClient &mqttClient);
 #endif
     static bool state_freeFlashSensor(MqttClient &mqttClient);
     static bool state_freeRAMSensor(MqttClient &mqttClient);

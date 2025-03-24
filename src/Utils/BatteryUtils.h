@@ -3,23 +3,12 @@
 #ifdef USE_BATTERY
 
 #include <Arduino.h>
-#include <esp_adc_cal.h>
-
-#ifndef BOARD_BAT_ADC_PIN
-// Battery & Solar
-#define BOARD_BAT_ADC_PIN 35
-#endif
+#include <esp32-hal-adc.h>
 
 class BatteryMonitor {
 public:
-    static void begin();
-    static uint16_t readBatteryVoltage();
-    static uint16_t readSolarVoltage();
-    static void printBatteryInfo();
-
-private:
-    static esp_adc_cal_characteristics_t adc_chars;
-    static uint16_t readVoltage(uint8_t channel);
+    static uint16_t readVoltage(uint8_t pin);
+    static void printBatteryInfo(uint8_t batteryPin, uint8_t solarPin);
 };
 
 #endif

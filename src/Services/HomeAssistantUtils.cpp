@@ -143,8 +143,8 @@ bool HomeAssistant::state_macSensor(MqttClient &mqttClient) {
 }
 
 #ifdef USE_BATTERY
-bool HomeAssistant::state_batteryVoltageSensor(MqttClient &mqttClient) {
-    uint16_t batteryVoltage = BatteryMonitor::readBatteryVoltage();
+bool HomeAssistant::state_batteryVoltageSensor(uint8_t pin, MqttClient &mqttClient) {
+    uint16_t batteryVoltage = BatteryMonitor::readVoltage(pin);
     String payload = createPayload("battery_voltage", batteryVoltage);
     return mqttClient.publish(ha_hubNode_batteryVoltage_state, payload); 
 }
