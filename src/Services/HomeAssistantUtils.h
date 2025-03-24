@@ -38,7 +38,8 @@
 #define ha_hubNode_freeFlash                "HN_FreeFlash"
 #define ha_hubNode_freeRAM                  "HN_FreeRAM"
 #define ha_hubNode_signalQuality            "HN_SignalQuality"
-#define ha_hubNode_temperature              "HN_Temperature"
+#define ha_hubNode_cpuTemperature           "HN_CPUTemperature"
+#define ha_hubNode_location_temperature     "HN_LocationTemp"
 #define ha_hubNode_bootCount                "HN_BootCount"
 #define ha_hubNode_zigbeeHub_bootCount      "HN_ZBH_BootCount"
 // - Homeassistant Config / Sensors (object ids) / Config Topics
@@ -49,7 +50,8 @@
 #define ha_hubNode_freeFlash_config             "homeassistant/sensor/Pakostane_HubNode_FreeFlash/config"
 #define ha_hubNode_freeRam_config               "homeassistant/sensor/Pakostane_HubNode_FreeRAM/config"
 #define ha_hubNode_signalQuality_config         "homeassistant/sensor/Pakostane_HubNode_SignalQuality/config"
-#define ha_hubNode_temperature_config           "homeassistant/sensor/Pakostane_HubNode_Temperature/config"
+#define ha_hubNode_cpuTemperature_config        "homeassistant/sensor/Pakostane_HubNode_CPUTemperature/config"
+#define ha_hubNode_location_temperature_config  "homeassistant/sensor/Pakostane_HubNode_LocationTemp/config"
 #define ha_hubNode_bootCount_config             "homeassistant/sensor/Pakostane_HubNode_BootCount/config"
 #define ha_hubNode_zigbeeHub_bootCount_config   "homeassistant/sensor/Pakostane_ZigbeeHub_BootCount/config"
 // - Homeassistant Config / Sensors (object ids) / State Topics
@@ -60,7 +62,8 @@
 #define ha_hubNode_freeFlash_state              "homeassistant/sensor/Pakostane_HubNode_FreeFlash/state"
 #define ha_hubNode_freeRam_state                "homeassistant/sensor/Pakostane_HubNode_FreeRAM/state"
 #define ha_hubNode_signalQuality_state          "homeassistant/sensor/Pakostane_HubNode_SignalQuality/state"
-#define ha_hubNode_temperature_state            "homeassistant/sensor/Pakostane_HubNode_Temperature/state"
+#define ha_hubNode_cpuTemperature_state         "homeassistant/sensor/Pakostane_HubNode_CPUTemperature/state"
+#define ha_hubNode_location_temperature_state   "homeassistant/sensor/Pakostane_HubNode_LocationTemp/state"
 #define ha_hubNode_bootCount_state              "homeassistant/sensor/Pakostane_HubNode_BootCount/state"
 #define ha_hubNode_zigbeeHub_bootCount_state    "homeassistant/sensor/Pakostane_ZigbeeHub_BootCount/state"
 // - Homeassistant / Subscriptions
@@ -83,6 +86,9 @@ public:
     static bool config_freeFlashSensor(MqttClient &mqttClient);
     static bool config_freeRAMSensor(MqttClient &mqttClient);
     static bool config_signalQualitySensor(MqttClient &mqttClient);
+#ifdef HAS_BUILTIN_TEMP_SENSOR
+    static bool config_cpuTemperatureSensor(MqttClient &mqttClient);
+#endif
 #ifdef USE_WEATHER
     static bool config_temperatureSensor(MqttClient &mqttClient);
 #endif
@@ -101,6 +107,9 @@ public:
     static bool state_freeFlashSensor(MqttClient &mqttClient);
     static bool state_freeRAMSensor(MqttClient &mqttClient);
     static bool state_signalQualitySensor(const int sigQuality, MqttClient &mqttClient);
+#ifdef HAS_BUILTIN_TEMP_SENSOR
+    static bool state_cpuTemperatureSensor(MqttClient &mqttClient);
+#endif
 #ifdef USE_WEATHER
     static bool state_temperatureSensor(float latitude, float longitude, MqttClient &mqttClient, Client& client);
 #endif

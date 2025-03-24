@@ -19,8 +19,11 @@ void HomeAssistant::config_check(MqttClient &mqttClient) {
     if (!config_checkAndCreate(ha_hubNode_freeFlash, pref)) config_freeFlashSensor(mqttClient);
     if (!config_checkAndCreate(ha_hubNode_freeRAM, pref)) config_freeRAMSensor(mqttClient);
     if (!config_checkAndCreate(ha_hubNode_signalQuality, pref)) config_signalQualitySensor(mqttClient);
+#ifdef HAS_BUILTIN_TEMP_SENSOR
+    if (!config_checkAndCreate(ha_hubNode_cpuTemperature, pref)) config_cpuTemperatureSensor(mqttClient);
+#endif
 #ifdef USE_WEATHER
-    if (!config_checkAndCreate(ha_hubNode_temperature, pref)) config_temperatureSensor(mqttClient);
+    if (!config_checkAndCreate(ha_hubNode_location_temperature, pref)) config_temperatureSensor(mqttClient);
 #endif
     if (!config_checkAndCreate(ha_hubNode_bootCount, pref)) config_bootCountSensor(mqttClient);
 #ifdef USE_ZIGBEE_HUB
@@ -116,17 +119,31 @@ bool HomeAssistant::config_signalQualitySensor(MqttClient &mqttClient) {
     return config_sensorRegistration(ha_hubNode_signalQuality_config, config, mqttClient);
 }
 
+#ifdef HAS_BUILTIN_TEMP_SENSOR
+bool HomeAssistant::config_cpuTemperatureSensor(MqttClient &mqttClient) {
+    JsonDocument config = config_sensorBasicConfig(
+        ha_hubNode_cpuTemperature,
+        "temperature", 
+        ha_hubNode_cpuTemperature,
+        "{{ value_json.cpu_temperature }}",
+        "°C",
+        ha_hubNode_cpuTemperature_state
+    );
+    return config_sensorRegistration(ha_hubNode_cpuTemperature_config, config, mqttClient);
+}
+#endif
+
 #ifdef USE_WEATHER
 bool HomeAssistant::config_temperatureSensor(MqttClient &mqttClient) {
     JsonDocument config = config_sensorBasicConfig(
-        ha_hubNode_temperature,
+        ha_hubNode_location_temperature,
         "temperature", 
-        ha_hubNode_temperature,
+        ha_hubNode_location_temperature,
         "{{ value_json.current_temperature }}",
         "°C",
-        ha_hubNode_temperature_state
+        ha_hubNode_location_temperature_state
     );
-    return config_sensorRegistration(ha_hubNode_temperature_config, config, mqttClient);
+    return config_sensorRegistration(ha_hubNode_location_temperature_config, config, mqttClient);
 }
 #endif
 
@@ -197,11 +214,22 @@ bool HomeAssistant::state_signalQualitySensor(const int sigQuality, MqttClient &
     return mqttClient.publish(ha_hubNode_signalQuality_state, payload); 
 }
 
+#ifdef HAS_BUILTIN_TEMP_SENSOR
+bool HomeAssistant::state_cpuTemperatureSensor(MqttClient &mqttClient) {
+    float temp_celsius = temperatureRead();
+    Serial.print("Temp onBoard ");
+    Serial.print(temp_celsius);
+    Serial.println("°C");
+    String payload = createPayload("cpu_temperature", temp_celsius);
+    return mqttClient.publish(ha_hubNode_cpuTemperature_state, payload); 
+}
+#endif
+
 #ifdef USE_WEATHER
 bool HomeAssistant::state_temperatureSensor(float latitude, float longitude, MqttClient &mqttClient, Client& client) {
     float temperature = WeatherUtils::fetchCurrentTemperature(weatherResource_param_temperature_2m, latitude, longitude, client);
     String payload = createPayload("current_temperature", temperature);
-    return mqttClient.publish(ha_hubNode_temperature_state, payload); 
+    return mqttClient.publish(ha_hubNode_location_temperature_state, payload); 
 }
 #endif
 
