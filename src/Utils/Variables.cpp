@@ -19,6 +19,22 @@ String DeviceVariable::getVariable(const char* pref, const char* var, const char
     return val;
 }
 
+uint32_t DeviceVariable::setVariableInt(const char* pref, const char* var, const uint32_t val) {
+    Preferences p;
+    p.begin(prefMetadata, false);
+    p.putInt(var, val);
+    p.end();
+    return val;
+}
+
+uint32_t DeviceVariable::getVariableInt(const char* pref, const char* var, const uint32_t defaultVal) {
+    Preferences p;
+    p.begin(prefMetadata, true);
+    uint32_t val = p.getInt(var, defaultVal);
+    p.end();
+    return val;
+}
+
 bool DeviceVariable::delVariable(const char* pref, const char* var) {
     Preferences p;
     p.begin(prefMetadata, false);
@@ -80,6 +96,14 @@ uint32_t DeviceSoftware::setBootNumber() {
     metadataPreference.putULong(prefMetadata_bootCount, ++bootCount);
     metadataPreference.end();
     return bootCount;
+}
+
+bool DeviceSoftware::resetBootNumber() {
+    Preferences metadataPreference;
+    metadataPreference.begin(prefMetadata, false);
+    bool rem = metadataPreference.remove(prefMetadata_bootCount);
+    metadataPreference.end();
+    return rem;
 }
 
 String DeviceSoftware::versionFormat(const char *major, const char *minor, const char *patch) {

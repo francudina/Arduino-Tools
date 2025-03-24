@@ -22,6 +22,10 @@ void HomeAssistant::config_check(MqttClient &mqttClient) {
 #ifdef USE_WEATHER
     if (!config_checkAndCreate(ha_hubNode_temperature, pref)) config_temperatureSensor(mqttClient);
 #endif
+    if (!config_checkAndCreate(ha_hubNode_bootCount, pref)) config_bootCountSensor(mqttClient);
+#ifdef USE_ZIGBEE_HUB
+    if (!config_checkAndCreate(ha_hubNode_zigbeeHub_bootCount, pref)) config_zigbeeHubBootCountSensor(mqttClient);
+#endif
 
     pref.end();
 }
@@ -126,6 +130,32 @@ bool HomeAssistant::config_temperatureSensor(MqttClient &mqttClient) {
 }
 #endif
 
+bool HomeAssistant::config_bootCountSensor(MqttClient &mqttClient) {
+    JsonDocument config = config_sensorBasicConfig(
+        ha_hubNode_bootCount,
+        "", 
+        ha_hubNode_bootCount,
+        "{{ value_json.boot_count }}",
+        "No.",
+        ha_hubNode_bootCount_state
+    );
+    return config_sensorRegistration(ha_hubNode_bootCount_config, config, mqttClient);
+}
+
+#ifdef USE_ZIGBEE_HUB
+bool HomeAssistant::config_zigbeeHubBootCountSensor(MqttClient &mqttClient) {
+    JsonDocument config = config_sensorBasicConfig(
+        ha_hubNode_zigbeeHub_bootCount,
+        "", 
+        ha_hubNode_zigbeeHub_bootCount,
+        "{{ value_json.zigbee_hub_boot_count }}",
+        "No.",
+        ha_hubNode_zigbeeHub_bootCount_state
+    );
+    return config_sensorRegistration(ha_hubNode_zigbeeHub_bootCount_config, config, mqttClient);
+}
+#endif
+
 bool HomeAssistant::state_statusSensor(const char *status, MqttClient &mqttClient) {
     String payload = createPayload("status", status);
     return mqttClient.publish(ha_hubNode_status_state, payload); 
@@ -172,6 +202,18 @@ bool HomeAssistant::state_temperatureSensor(float latitude, float longitude, Mqt
     float temperature = WeatherUtils::fetchCurrentTemperature(weatherResource_param_temperature_2m, latitude, longitude, client);
     String payload = createPayload("current_temperature", temperature);
     return mqttClient.publish(ha_hubNode_temperature_state, payload); 
+}
+#endif
+
+bool HomeAssistant::state_bootCountSensor(uint32_t bootCount, MqttClient &mqttClient) {
+    String payload = createPayload("boot_count", bootCount);
+    return mqttClient.publish(ha_hubNode_bootCount_state, payload); 
+}
+
+#ifdef USE_ZIGBEE_HUB
+bool HomeAssistant::state_zigbeeHubBootCountSensor(uint32_t bootCount, MqttClient &mqttClient) {
+    String payload = createPayload("zigbee_hub_boot_count", bootCount);
+    return mqttClient.publish(ha_hubNode_zigbeeHub_bootCount_state, payload); 
 }
 #endif
 

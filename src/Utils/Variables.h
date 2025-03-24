@@ -26,6 +26,10 @@ class DeviceVariable {
     public:    
         static String setVariable(const char* pref, const char* var, const char* val);
         static String getVariable(const char* pref, const char* var, const char* defaultVal = "");
+
+        static uint32_t setVariableInt(const char* pref, const char* var, const uint32_t val);
+        static uint32_t getVariableInt(const char* pref, const char* var, const uint32_t defaultVal = -1);
+
         static bool delVariable(const char* pref, const char* var);
         static bool clear(const char* pref);
     };
@@ -39,6 +43,7 @@ public:
 
     static uint32_t getBootNumber();
     static uint32_t setBootNumber();
+    static bool resetBootNumber();
 
 private:
     static String versionFormat(const char *major, const char *minor, const char *patch);
