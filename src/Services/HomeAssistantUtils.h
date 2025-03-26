@@ -118,14 +118,7 @@ public:
     static bool state_zigbeeHubBootCountSensor(uint32_t bootCount, MqttClient &mqttClient);
 #endif
 
-private:
-    static bool config_checkAndCreate(const char *unique_id, Preferences &pref);
-
-    static String createPayload(const char *key, const char *value);
-    static String createPayload(const char *key, const float value);
-    static String createPayload(const char *key, const int value);
-    static String createPayload(const char *key, const uint32_t value);
-
+    // config / generic 
     static JsonDocument config_sensorBasicConfig(
         const char* name,
         const char* device_class, 
@@ -134,11 +127,20 @@ private:
         const char* unit_of_measurement,
         const char* state_topic
     );
+
     static bool config_sensorRegistration(
         const char* configTopic, 
         const JsonDocument &payload, 
         MqttClient &mqttClient
     );
+
+private:
+    static bool config_checkAndCreate(const char *unique_id, Preferences &pref);
+
+    static String createPayload(const char *key, const char *value);
+    static String createPayload(const char *key, const float value);
+    static String createPayload(const char *key, const int value);
+    static String createPayload(const char *key, const uint32_t value);
 };
 
 #endif
