@@ -134,7 +134,6 @@ public:
         MqttClient &mqttClient
     );
 
-private:
     static bool config_checkAndCreate(const char *unique_id, Preferences &pref);
 
     static String createPayload(const char *key, const char *value);
