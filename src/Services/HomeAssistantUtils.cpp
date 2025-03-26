@@ -284,7 +284,12 @@ JsonDocument HomeAssistant::config_sensorBasicConfig(
     const char* unique_id,
     const char* value_template,
     const char* unit_of_measurement,
-    const char* state_topic
+    const char* state_topic,
+    const char* dev_name,
+    const char* dev_manufacturer,
+    const char* dev_model,
+    const char* dev_hw_version,
+    const char* dev_sw_version
 ) {
     // create config object for sensor registration
     JsonDocument sensorDoc;
@@ -297,14 +302,14 @@ JsonDocument HomeAssistant::config_sensorBasicConfig(
     sensorDoc["value_template"] = value_template;
 
     JsonObject device = sensorDoc["device"].to<JsonObject>();
-    device["name"] = ha_hubNode;
-    device["manufacturer"] = device_manufacturer;
-    device["model"] = device_model;
-    device["hw_version"] = device_hw_version;
-    device["sw_version"] = DeviceSoftware::getVersion();
+    device["name"] = dev_name;
+    device["manufacturer"] = dev_manufacturer;
+    device["model"] = dev_model;
+    device["hw_version"] = dev_hw_version;
+    device["sw_version"] = dev_sw_version;
 
     JsonArray identifiers = device["identifiers"].to<JsonArray>();
-    identifiers.add(ha_hubNode);
+    identifiers.add(dev_name);
 
     return sensorDoc;
 }

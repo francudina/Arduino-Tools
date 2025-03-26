@@ -120,12 +120,17 @@ public:
 
     // config / generic 
     static JsonDocument config_sensorBasicConfig(
-        const char* name,
+        const char* name, 
         const char* device_class, 
-        const char* unique_id, 
+        const char* unique_id,
         const char* value_template,
         const char* unit_of_measurement,
-        const char* state_topic
+        const char* state_topic,
+        const char* dev_name = ha_hubNode,
+        const char* dev_manufacturer = device_manufacturer,
+        const char* dev_model = device_model,
+        const char* dev_hw_version = device_hw_version,
+        const char* dev_sw_version = DeviceSoftware::getVersion().c_str()
     );
 
     static bool config_sensorRegistration(
