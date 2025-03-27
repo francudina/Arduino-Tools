@@ -22,9 +22,9 @@ String DeviceVariable::getVariable(const char* pref, const char* var, const char
 uint32_t DeviceVariable::setVariableInt(const char* pref, const char* var, const uint32_t val) {
     Preferences p;
     p.begin(prefMetadata, false);
-    p.putInt(var, val);
+    size_t s = p.putInt(var, val);
     p.end();
-    return val;
+    return s == 0 ? 0 : val;
 }
 
 uint32_t DeviceVariable::getVariableInt(const char* pref, const char* var, const uint32_t defaultVal) {
