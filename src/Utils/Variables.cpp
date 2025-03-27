@@ -6,9 +6,9 @@ String DeviceVariable::setVariable(const char* pref, const char* var, const char
     Preferences p;
     p.begin(prefMetadata, false);
     String v = String(val);
-    p.putString(var, v);
+    size_t s = p.putString(var, v);
     p.end();
-    return v;
+    return s == 0 ? "" : v;
 }
 
 String DeviceVariable::getVariable(const char* pref, const char* var, const char* defaultVal) {
