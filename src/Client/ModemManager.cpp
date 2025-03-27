@@ -178,7 +178,7 @@ bool ModemManager::enterSleepMode() {
 #endif
 
     // false means entered sleep mode!
-    return wentToSleep;
+    return true;
 }
 
 /*
