@@ -35,6 +35,22 @@ uint32_t DeviceVariable::getVariableInt(const char* pref, const char* var, const
     return val;
 }
 
+bool DeviceVariable::setVariableBool(const char* pref, const char* var, const bool val) {
+    Preferences p;
+    p.begin(prefMetadata, false);
+    size_t s = p.putBool(var, val);
+    p.end();
+    return s == 0 ? false : val;
+}
+
+bool DeviceVariable::getVariableBool(const char* pref, const char* var, const bool defaultVal) {
+    Preferences p;
+    p.begin(prefMetadata, true);
+    bool val = p.getBool(var, defaultVal);
+    p.end();
+    return val;
+}
+
 bool DeviceVariable::delVariable(const char* pref, const char* var) {
     Preferences p;
     p.begin(prefMetadata, false);

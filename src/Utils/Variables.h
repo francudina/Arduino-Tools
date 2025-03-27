@@ -30,6 +30,9 @@ class DeviceVariable {
         static uint32_t setVariableInt(const char* pref, const char* var, const uint32_t val);
         static uint32_t getVariableInt(const char* pref, const char* var, const uint32_t defaultVal = -1);
 
+        static bool setVariableBool(const char* pref, const char* var, const bool val);
+        static bool getVariableBool(const char* pref, const char* var, const bool defaultVal = false);
+
         static bool delVariable(const char* pref, const char* var);
         static bool clear(const char* pref);
     };
