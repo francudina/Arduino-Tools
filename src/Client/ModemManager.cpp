@@ -156,12 +156,12 @@ bool ModemManager::enterSleepMode() {
 
     delay(2000);
 
-    // Serial.println("Modem: Checking modem response...");
-    // while (modem.testAT(1000)) {
-    //     delay(500);
-    // }
-    // bool wentToSleep = !modem.testAT(1000);
-    // Serial.printf("Modem: Modem has enterd POWER OFF: %s\n", wentToSleep ? "TRUE" : "FALSE");
+    Serial.println("Modem: Checking modem response...");
+    while (modem.testAT(1000)) {
+        delay(500);
+    }
+    bool wentToSleep = !modem.testAT(1000);
+    Serial.printf("Modem: Modem has enterd POWER OFF: %s\n", wentToSleep ? "TRUE" : "FALSE");
 
 #ifdef BOARD_POWERON_PIN
     // Turn on DC boost to power off the modem
