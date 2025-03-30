@@ -53,16 +53,16 @@ bool ModemManager::modemInit() {
 
     delay(2000);
 
-    Serial.println("Modem: Check if modem is online...");
-    while (!modem.testAT()) {
-        delay(500);
-    }
-    bool modemBoot = modem.testAT(1000);
-    Serial.printf("Modem: Modem is %s\n", modemBoot ? "ONLINE" : "OFFLINE");
+    // Serial.println("Modem: Check if modem is online...");
+    // while (!modem.testAT()) {
+    //     delay(500);
+    // }
+    // bool modemBoot = modem.testAT(1000);
+    // Serial.printf("Modem: Modem is %s\n", modemBoot ? "ONLINE" : "OFFLINE");
 
-    Serial.printf("Modem: modem init%s: %s\n",
-        wakeUpCause ? " WAKEUP from sleep" : "",
-        modemBoot ? "success" : "fail");
+    // Serial.printf("Modem: modem init%s: %s\n",
+    //     wakeUpCause ? " WAKEUP from sleep" : "",
+    //     modemBoot ? "success" : "fail");
     
 #ifdef DEVICE_LOGGING
     // modem info
