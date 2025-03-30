@@ -53,16 +53,16 @@ bool ModemManager::modemInit() {
 
     delay(2000);
 
-    // Serial.println("Modem: Check if modem is online...");
-    // while (!modem.testAT()) {
-    //     delay(500);
-    // }
-    // bool modemBoot = modem.testAT(1000);
-    // Serial.printf("Modem: Modem is %s\n", modemBoot ? "ONLINE" : "OFFLINE");
+    Serial.println("Modem: Check if modem is online...");
+    while (!modem.testAT()) {
+        delay(500);
+    }
+    bool modemBoot = modem.testAT(1000);
+    Serial.printf("Modem: Modem is %s\n", modemBoot ? "ONLINE" : "OFFLINE");
 
-    // Serial.printf("Modem: modem init%s: %s\n",
-    //     wakeUpCause ? " WAKEUP from sleep" : "",
-    //     modemBoot ? "success" : "fail");
+    Serial.printf("Modem: modem init%s: %s\n",
+        wakeUpCause ? " WAKEUP from sleep" : "",
+        modemBoot ? "success" : "fail");
     
 #ifdef DEVICE_LOGGING
     // modem info
@@ -156,12 +156,12 @@ bool ModemManager::enterSleepMode() {
 
     delay(2000);
 
-    Serial.println("Modem: Checking modem response...");
-    while (modem.testAT(1000)) {
-        delay(500);
-    }
-    bool wentToSleep = !modem.testAT(1000);
-    Serial.printf("Modem: Modem has enterd POWER OFF: %s\n", wentToSleep ? "TRUE" : "FALSE");
+    // Serial.println("Modem: Checking modem response...");
+    // while (modem.testAT(1000)) {
+    //     delay(500);
+    // }
+    // bool wentToSleep = !modem.testAT(1000);
+    // Serial.printf("Modem: Modem has enterd POWER OFF: %s\n", wentToSleep ? "TRUE" : "FALSE");
 
 #ifdef BOARD_POWERON_PIN
     // Turn on DC boost to power off the modem
@@ -177,8 +177,7 @@ bool ModemManager::enterSleepMode() {
     gpio_deep_sleep_hold_en();
 #endif
 
-    // false means entered sleep mode!
-    return true;
+    return poweroff;
 }
 
 /*
