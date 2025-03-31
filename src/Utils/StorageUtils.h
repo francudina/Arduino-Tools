@@ -21,7 +21,10 @@
 
 class SDCard {
 public:
+    const char *TAG = "SD_CARD";
+
     static bool cardInit();
+    static bool isAvailable();
 
     static uint8_t cardType();
     static String cardTypeName();

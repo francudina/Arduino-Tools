@@ -11,7 +11,12 @@ bool SDCard::cardInit() {
         Serial.println("SDCard: Mount Failed");
         return false;
     }
-    return cardTypeName() != "UNKNOWN";
+    return isAvailable();
+}
+
+bool SDCard::isAvailable() {
+    String type = cardTypeName();
+    return type != "UNKNOWN" && type != "CARD_NONE";
 }
 
 uint8_t SDCard::cardType() {
@@ -95,15 +100,18 @@ void SDCard::removeDir(fs::FS &fs, const char *path) {
 }
 
 void SDCard::readFile(fs::FS &fs, const char *path) {
+#ifdef SD_CARD_DEBUG
     Serial.printf("SDCard: Reading file: %s\n", path);
+#endif
 
     File file = fs.open(path);
     if (!file) {
         Serial.println("Failed to open file for reading");
         return;
     }
-
+#ifdef SD_CARD_DEBUG
     Serial.print("SDCard: Read from file: ");
+#endif
     while (file.available()) {
         Serial.write(file.read());
     }
@@ -111,7 +119,9 @@ void SDCard::readFile(fs::FS &fs, const char *path) {
 }
 
 void SDCard::writeFile(fs::FS &fs, const char *path, const char *message) {
+#ifdef SD_CARD_DEBUG
     Serial.printf("SDCard: Writing file: %s\n", path);
+#endif
 
     File file = fs.open(path, FILE_WRITE);
     if (!file) {
@@ -119,7 +129,9 @@ void SDCard::writeFile(fs::FS &fs, const char *path, const char *message) {
         return;
     }
     if (file.print(message)) {
+#ifdef SD_CARD_DEBUG
         Serial.println("File written");
+#endif
     } else {
         Serial.println("Write failed");
     }
@@ -127,7 +139,9 @@ void SDCard::writeFile(fs::FS &fs, const char *path, const char *message) {
 }
 
 void SDCard::appendFile(fs::FS &fs, const char *path, const char *message) {
+#ifdef SD_CARD_DEBUG
     Serial.printf("SDCard: Appending to file: %s\n", path);
+#endif
 
     File file = fs.open(path, FILE_APPEND);
     if (!file) {
@@ -135,7 +149,9 @@ void SDCard::appendFile(fs::FS &fs, const char *path, const char *message) {
         return;
     }
     if (file.print(message)) {
+#ifdef SD_CARD_DEBUG
         Serial.println("Message appended");
+#endif
     } else {
         Serial.println("Append failed");
     }
