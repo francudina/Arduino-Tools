@@ -27,13 +27,12 @@ bool ModemManager::modemInit() {
     bool wakeUpCause = esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_TIMER;
     Serial.printf("Modem: Woken up with timer from sleep: %s\n", wakeUpCause ? "TRUE" : "FALSE");
 
-    // replaced by powerOnModem() method
-//     // Turn on DC boost to power on the modem
-// #ifdef BOARD_POWERON_PIN
-//     pinMode(BOARD_POWERON_PIN, OUTPUT);
-//     digitalWrite(BOARD_POWERON_PIN, HIGH);
-//     Serial.println("Modem: Powering on the modem through POWERON pin");
-// #endif
+    // Turn on DC boost to power on the modem
+#ifdef BOARD_POWERON_PIN
+    pinMode(BOARD_POWERON_PIN, OUTPUT);
+    digitalWrite(BOARD_POWERON_PIN, HIGH);
+    Serial.println("Modem: Powering on the modem through POWERON pin");
+#endif
 
     delay(2000);
 #ifdef MODEM_RESET_PIN
