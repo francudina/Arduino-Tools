@@ -99,6 +99,7 @@ public:
     ModemManager();
     TinyGsmClient& getGsmClient();
 
+    bool powerOnModem();  // put it on the beginning of the setup() method 
     bool modemInit();
     bool connect();
 
